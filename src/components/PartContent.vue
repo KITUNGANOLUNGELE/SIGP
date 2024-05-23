@@ -48,9 +48,10 @@
 
                 <ul class="box-info">
                   <li class="aos-item" data-aos="zoom-in-right">
-                    <div class="text-weight-bold">Information Père</div>
                     <q-form>
-                      <q-input
+                      <div class="sudb">
+                          <h5 style="margin-bottom: 10%; text-align: center;"><q-icon name="edit"/> Identification</h5>
+                          <q-input
                         dense
                         v-model="nom_p"
                         label="Nom du Père"
@@ -85,6 +86,8 @@
                         type="date"
                         :rules="[(val) => !!val || 'Champ requis']"
                       />
+                      </div>
+
                       <q-select
                         dense
                         v-model="groupement_p"
@@ -903,6 +906,14 @@ h1 {
   font-size: 13px;
   text-align: left;
   border-bottom: 1px solid #eee;
+}
+.sudb{
+  background-color: white;
+  border: none;
+  color : rgb(10, 10, 10);
+  width: 100%;
+  margin-bottom: 10%;
+  border-radius: 5%;
 }
 .table-data .order table td {
   padding: 16px 0;
