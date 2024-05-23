@@ -1,0 +1,247 @@
+// app global css in SCSS form
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Redressed&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap');
+* {
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+  font-size: 13px;
+  text-decoration: none;
+}
+html::-webkit-scrollbar {
+  width: 0.5rem;
+  background: transparent;
+}
+
+html::-webkit-scrollbar-thumb {
+  border-radius: 4rem;
+  background: #000;
+}
+.container-login100 {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+  background: #fff;
+}
+.wrap-login100 {
+  width: 400px;
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+}
+
+/*==================================================================
+[ Title form ]*/
+.login100-form-title {
+  width: auto;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: center;
+
+  padding: 50px 10px 44px 10px;
+}
+
+.login100-form-title-1 {
+  font-family: "poppins";
+  font-weight: 700;
+  font-size: 30px;
+  color: #000;
+  text-transform: uppercase;
+  line-height: 1.2;
+  text-align: center;
+}
+
+/*------------------------------------------------------------------
+[ Responsive ]*/
+
+@media (max-width: 576px) {
+  .login100-form {
+    padding: 43px 15px 57px 117px;
+  }
+}
+
+@media (max-width: 480px) {
+  .login100-form {
+    padding: 43px 15px 57px 15px;
+  }
+
+  .label-input100 {
+    text-align: left;
+    position: unset;
+    top: unset;
+    left: unset;
+    width: 100%;
+    padding: 0 10px;
+  }
+}
+.my-emoji {
+  vertical-align: middle;
+  height: 2em;
+  width: 2em;
+}
+
+.navbar {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: transparent;
+   padding: 10px 20px;
+  transition: background-color 0.3s ease;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+}
+
+.logo .text-h6 {
+  height: auto;
+}
+
+.nav-links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  position: relative;
+}
+
+.nav-links li {
+  margin-right: 20px;
+  position: relative;
+}
+
+.nav-links li:last-child {
+  margin-right: 0;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: white;
+  position: relative;
+  font-size: 1.2rem;
+  transition: color 0.3s ease;
+  cursor: pointer;
+}
+@media (max-width:768px){
+  .nav-links a {
+    display: none;
+  }
+}
+@media (min-width:768px){
+  .hider .q-icon {
+    display: none;
+  }
+}
+@media (max-width:768px) {
+  .hider .q-btn {
+    display: none;
+  }
+
+}
+
+.nav-links a:hover {
+  width: 80%;
+  color: rgb(23, 174, 228);
+}
+// Ajustement du soulignement
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  width: 50%;
+  height: 2px;
+  bottom: -3px;
+  background-color: transparent;
+  transition: width 0.3s ease, background-color 0.3s ease;
+  left: 25%;
+}
+
+.nav-links a:hover::after {
+  width: 50%;
+  background-color: lightgray;
+  left: 25%;
+}
+// Fin ajustement soulignement
+// Gestion background
+.video-background {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.video-background video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+/* Responsivité pour les appareils mobiles */
+@media only screen and (max-width: 768px) {
+  .video-background {
+    height: 50vh;
+  }
+
+}
+// Fin gestion du background
+// MENU LIST
+.listMenu{
+  background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    padding: 20px;
+    color:#fff;
+}
+.itema:hover{
+  color: rgb(23, 174, 228) ;
+}
+.ringo{
+  font-family: "Rajdhani", sans-serif;
+  font-weight: 500;
+  font-size: 42px;
+
+}
+.ringo:hover{
+  width: 80%;
+  cursor: pointer;
+}
+// Souignement
+#souligne {
+  position: relative;
+  margin-bottom: 20px; /* Espacement entre le texte et le soulignement */
+  line-height: 1.5; /* Espacement entre les lignes de texte */
+}
+
+#souligne::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  width: 50%;
+  height: 3px;
+  background-color: #ffffff;
+  transition: width 0.3s ease, height 0.3s ease;
+}
+
+#souligne:hover::after {
+  height: 6px;
+}
+
+@media only screen and (max-width: 768px) {
+  #souligne {
+    font-size: 24px;
+    line-height: 1.2;
+    display: flex;
+    align-items: center;
+  }
+}
