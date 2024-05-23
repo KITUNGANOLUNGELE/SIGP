@@ -172,9 +172,11 @@
                 </div>
                 <ul class="box-info">
                   <li class="aos-item" data-aos="zoom-in-right">
-                    <div class="text-weight-bold">Information Mère</div>
+                   
                     <q-form>
-                      <q-input
+                      <div class="sudb">
+                        <h5 style="margin-bottom: 10%; text-align: center;"><q-icon name="edit"/> Identification</h5>
+                        <q-input
                         dense
                         v-model="nom_m"
                         label="Nom de la mère"
@@ -209,6 +211,8 @@
                         type="date"
                         :rules="[(val) => !!val || 'Champ requis']"
                       />
+                      </div>
+                     
                       <q-select
                         v-model="groupement_m"
                         use-input
@@ -293,9 +297,11 @@
 
                 <ul class="box-info">
                   <li class="aos-item" data-aos="zoom-in-right">
-                    <div class="text-weight-bold">Nouvelle Naisssance</div>
+                  
                     <q-form>
-                      <q-input
+                      <div class="sudb">
+                        <h5 style="margin-bottom: 10%; text-align: center;"><q-icon name="edit"/> Identification</h5>
+                        <q-input
                         dense
                         v-model="nom"
                         label="Nom de la personne"
@@ -337,24 +343,36 @@
                         type="date"
                         :rules="[(val) => !!val || 'Champ requis']"
                       />
+                      </div>
+                     <div class="sudb">
+                      <h5 style="margin-bottom: 10%; text-align: center;"><q-icon name="edit"/>Orgine</h5>
                       <q-select
-                        v-model="couleur_oeil"
-                        :options="options_eye"
-                        label="Couleur oeil"
-                        dense
-                        :rules="[(val) => !!val || 'Champ requis']"
-                      />
-                      <q-select
-                        v-model="groupement"
-                        use-input
-                        input-debounce="0"
-                        label="Nom du groupement"
-                        :options="options_groupement"
-                        @filter="filterFn"
-                        :rules="[(val) => !!val || 'Champ requis']"
-                        style="width: 100%"
-                        behavior="menu"
-                      />
+                      v-model="couleur_oeil"
+                      :options="options_eye"
+                      label="Couleur oeil"
+                      dense
+                      :rules="[(val) => !!val || 'Champ requis']"
+                    />
+                    <q-select
+                    v-model="groupement"
+                      :options="options_groupement"
+                      label="Groupement"
+                      dense
+                      :rules="[(val) => !!val || 'Champ requis']"
+                    />
+                    <!-- <q-select
+                      v-model="groupement"
+                      use-input
+                      input-debounce="0"
+                      label="Nom du groupement"
+                      :options="options_groupement"
+                      @filter="filterFn"
+                      :rules="[(val) => !!val || 'Champ requis']"
+                      
+                      behavior="menu"
+                    /> -->
+                     </div>
+                     
                       <q-input
                         dense
                         v-model="pays"
