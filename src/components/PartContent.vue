@@ -68,39 +68,60 @@
                         label="Postnom"
                         type="text"
                         :rules="[(val) => !!val || 'Champ requis']"
-                      />
+                     >
+                        <template v-slot:prepend>
+                          <q-icon name="man" color="primary"/>
+                        </template>
+                    </q-input>
                       <q-input
                         dense
                         v-model="prenom_p"
                         label="Prenom"
                         type="text"
                         :rules="[(val) => !!val || 'Champ requis']"
-                      />
+                      >
+                        <template v-slot:prepend>
+                          <q-icon name="man" color="primary"/>
+                        </template>
+                    </q-input>
                       <q-input
                         dense
                         v-model="l_naiss_p"
                         label="Lieu de naissance"
                         type="text"
                         :rules="[(val) => !!val || 'Champ requis']"
-                      />
+                     >
+                        <template v-slot:prepend>
+                          <q-icon name="pin_drop" color="primary"/>
+                        </template>
+                    </q-input>
                       <q-input
                         dense
                         v-model="d_naiss_p"
                         label="Date de Naissance"
                         type="date"
                         :rules="[(val) => !!val || 'Champ requis']"
-                      />
+                       >
+                        <template v-slot:prepend>
+                          <q-icon name="history" color="primary"/>
+                        </template>
+                    </q-input>
                       </div>
 
                       <div class="sudb">
                       <h5 style="margin-bottom: 10%; text-align: center;"><q-icon name="home" color="primary"/> Origine</h5>
+
                        <q-select
                       v-model="pays"
                         label="Pays de résidence"
                         type="text"
                       dense
                       :rules="[(val) => !!val || 'Champ requis']"
-                    />
+                      >
+                        <template v-slot:prepend>
+                          <q-icon name="language" color="primary"/>
+                        </template>
+                      </q-select>
                       <q-select
                         dense
                         v-model="province"
