@@ -376,7 +376,8 @@
                         label="Prenom"
                         type="text"
                         :rules="[(val) => !!val || 'Champ requis']"
-                      />
+                      >
+                    </q-input>
                       <q-select
                         v-model="sexe"
                         :options="options_genre"
