@@ -119,7 +119,7 @@
                       :rules="[(val) => !!val || 'Champ requis']"
                       >
                         <template v-slot:prepend>
-                          <q-icon name="languagen" color="primary"/>
+                          <q-icon name="language" color="primary"/>
                         </template>
                       </q-select>
                       <q-select
