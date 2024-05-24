@@ -57,7 +57,11 @@
                         label="Nom du Père"
                         type="text"
                         :rules="[(val) => !!val || 'Champ requis']"
-                      />
+                      >
+                        <template v-slot:prepend>
+                          <q-icon name="man" color="primary"/>
+                        </template>
+                    </q-input>
                       <q-input
                         dense
                         v-model="postnom_p"
@@ -241,7 +245,7 @@
                       </div>
 
                       <div class="sudb">
-                      <h5 style="margin-bottom: 10%; text-align: center;"><q-icon name="location_on" color="primary"/>Origine</h5>
+                      <h5 style="margin-bottom: 10%; text-align: center;"><q-icon name="home" color="primary"/>Origine</h5>
                        <q-select
                       v-model="pays"
                         label="Pays de résidence"
@@ -355,7 +359,7 @@
 
                     <q-form>
                       <div class="sudb">
-                        <h5 style="margin-bottom: 10%; text-align: center;"><q-icon name="edit"/> Identification</h5>
+                        <h5 style="margin-bottom: 10%; text-align: center;"><q-icon name="edit" color="primary"/> Identification</h5>
                         <q-input
                         dense
                         v-model="nom"
@@ -407,7 +411,7 @@
                     />
                       </div>
                      <div class="sudb">
-                      <h5 style="margin-bottom: 10%; text-align: center;"><q-icon name="Location Away"/>Origine</h5>
+                      <h5 style="margin-bottom: 10%; text-align: center;"><q-icon name="home" color="primary"/>Origine</h5>
                        <q-select
                       v-model="pays"
                         label="Pays de résidence"
@@ -457,7 +461,7 @@
                     /> -->
                      </div>
                      <div class="sudb">
-                      <h5 style="margin-bottom: 10%; text-align: center;"><q-icon name="edit"/>Résidence</h5>
+                      <h5 style="margin-bottom: 10%; text-align: center;"><q-icon name="location_on" color="primary"/>Résidence</h5>
                       <q-select
                         dense
                         v-model="commune"
