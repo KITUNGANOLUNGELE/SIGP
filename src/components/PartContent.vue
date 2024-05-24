@@ -50,108 +50,118 @@
                   <li class="aos-item" data-aos="zoom-in-right">
                     <q-form>
                       <div class="sudb">
-                          <h5 style="margin-bottom: 10%; text-align: center;"><q-icon name="edit" color= "primary"/> Identification</h5>
-                          <q-input
-                        dense
-                        v-model="nom_p"
-                        label="Nom du Père"
-                        type="text"
-                        :rules="[(val) => !!val || 'Champ requis']"
-                      >
-                        <template v-slot:prepend>
-                          <q-icon name="man" color="primary"/>
-                        </template>
-                    </q-input>
-                      <q-input
-                        dense
-                        v-model="postnom_p"
-                        label="Postnom"
-                        type="text"
-                        :rules="[(val) => !!val || 'Champ requis']"
-                     >
-                        <template v-slot:prepend>
-                          <q-icon name="man" color="primary"/>
-                        </template>
-                    </q-input>
-                      <q-input
-                        dense
-                        v-model="prenom_p"
-                        label="Prenom"
-                        type="text"
-                        :rules="[(val) => !!val || 'Champ requis']"
-                      >
-                        <template v-slot:prepend>
-                          <q-icon name="man" color="primary"/>
-                        </template>
-                    </q-input>
-                      <q-input
-                        dense
-                        v-model="l_naiss_p"
-                        label="Lieu de naissance"
-                        type="text"
-                        :rules="[(val) => !!val || 'Champ requis']"
-                     >
-                        <template v-slot:prepend>
-                          <q-icon name="pin_drop" color="primary"/>
-                        </template>
-                    </q-input>
-                      <q-input
-                        dense
-                        v-model="d_naiss_p"
-                        label="Date de Naissance"
-                        type="date"
-                        :rules="[(val) => !!val || 'Champ requis']"
-                       >
-                        <template v-slot:prepend>
-                          <q-icon name="history" color="primary"/>
-                        </template>
-                    </q-input>
+                        <h5 style="margin-bottom: 10%; text-align: center">
+                          <q-icon name="edit" color="primary" /> Identification
+                        </h5>
+                        <q-input
+                          dense
+                          v-model="nom_p"
+                          label="Nom du Père"
+                          type="text"
+                          @keypress="search"
+                          :rules="[(val) => !!val || 'Champ requis']"
+                        >
+                          <template v-slot:prepend>
+                            <q-icon name="man" color="primary" />
+                          </template>
+                        </q-input>
+                        <q-input
+                          dense
+                          v-model="postnom_p"
+                          label="Postnom"
+                          type="text"
+                          @keypress="search"
+                          :rules="[(val) => !!val || 'Champ requis']"
+                        >
+                          <template v-slot:prepend>
+                            <q-icon name="man" color="primary" />
+                          </template>
+                        </q-input>
+                        <q-input
+                          dense
+                          v-model="prenom_p"
+                          label="Prenom"
+                          type="text"
+                          @keypress="search"
+                          :rules="[(val) => !!val || 'Champ requis']"
+                        >
+                          <template v-slot:prepend>
+                            <q-icon name="man" color="primary" />
+                          </template>
+                        </q-input>
+                        <q-select
+                          dense
+                          v-model="l_naiss_p"
+                          label="Lieu de naissance"
+                          type="text"
+                          behavior="menu"
+                          options = ""
+                          :rules="[(val) => !!val || 'Champ requis']"
+                        >
+                          <template v-slot:prepend>
+                            <q-icon name="pin_drop" color="primary" />
+                          </template>
+                        </q-select>
+                        <q-input
+                          dense
+                          v-model="d_naiss_p"
+                          label="Date de Naissance"
+                          type="date"
+                          @change="search"
+                          :rules="[(val) => !!val || 'Champ requis']"
+                        >
+                          <template v-slot:prepend>
+                            <q-icon name="history" color="primary" />
+                          </template>
+                        </q-input>
                       </div>
 
                       <div class="sudb">
-                      <h5 style="margin-bottom: 10%; text-align: center;"><q-icon name="home" color="primary"/> Origine</h5>
+                        <h5 style="margin-bottom: 10%; text-align: center">
+                          <q-icon name="home" color="primary" /> Origine
+                        </h5>
 
-                       <q-select
-                      v-model="pays"
-                        label="Pays de résidence"
-                        type="text"
-                      dense
-                      :rules="[(val) => !!val || 'Champ requis']"
-                      >
-                        <template v-slot:prepend>
-                          <q-icon name="language" color="primary"/>
-                        </template>
-                      </q-select>
-                      <q-select
-                        dense
-                        v-model="province"
-                        :options="option_province"
-                        label="Province d'origine"
-                        type="text"
-                        :rules="[(val) => !!val || 'Champ requis']"
-                      />
-                    <q-select
-                    v-model="territoire"
-                      :options="options_territoire"
-                      label="Territoire"
-                      dense
-                      :rules="[(val) => !!val || 'Champ requis']"
-                    />
-                      <q-select
-                    v-model="groupement"
-                      :options="options_groupement"
-                      label="Groupement"
-                      dense
-                      :rules="[(val) => !!val || 'Champ requis']"
-                    />
-                     <q-select
-                    v-model="village"
-                      :options="options_village"
-                      label="Village"
-                      dense
-                      :rules="[(val) => !!val || 'Champ requis']"
-                    />
-                    <!-- <q-select
+                        <q-select
+                          v-model="pays"
+                          label="Pays de résidence"
+                          type="text"
+                          dense
+                          :rules="[(val) => !!val || 'Champ requis']"
+                        >
+                          <template v-slot:prepend>
+                            <q-icon name="language" color="primary" />
+                          </template>
+                        </q-select>
+                        <q-select
+                          dense
+                          v-model="province"
+                          :options="option_province"
+                          label="Province d'origine"
+                          type="text"
+                          :rules="[(val) => !!val || 'Champ requis']"
+                        />
+                        <q-select
+                          v-model="territoire"
+                          :options="options_territoire"
+                          label="Territoire"
+                          dense
+                          :rules="[(val) => !!val || 'Champ requis']"
+                        />
+                        <q-select
+                          v-model="groupement"
+                          :options="options_groupement"
+                          label="Groupement"
+                          dense
+                          :rules="[(val) => !!val || 'Champ requis']"
+                        />
+                        <q-select
+                          v-model="village"
+                          :options="options_village"
+                          label="Village"
+                          dense
+                          :rules="[(val) => !!val || 'Champ requis']"
+                        />
+                        <!-- <q-select
                       v-model="groupement"
                       use-input
                       input-debounce="0"
@@ -162,38 +172,40 @@
 
                       behavior="menu"
                     /> -->
-                     </div>
-                     <div class="sudb">
-                      <h5 style="margin-bottom: 10%; text-align: center;"><q-icon name="location_on" color="primary"/>Résidence</h5>
-                      <q-select
-                        dense
-                        v-model="commune"
-                        label="Commune de résidence"
-                        type="text"
-                        :rules="[(val) => !!val || 'Champ requis']"
-                      />
-                      <q-select
-                        dense
-                        v-model="quartier"
-                        label="Quartier de résidence"
-                        type="text"
-                        :rules="[(val) => !!val || 'Champ requis']"
-                      />
-                      <q-select
-                        dense
-                        v-model="avenue"
-                        label="Avenue"
-                        type="text"
-                        :rules="[(val) => !!val || 'Champ requis']"
-                      />
-                      <q-input
-                        dense
-                        v-model="num_maison"
-                        label="Numero Maison"
-                        type="number"
-                        :rules="[(val) => !!val || 'Champ requis']"
-                      />
-                     </div>
+                      </div>
+                      <div class="sudb">
+                        <h5 style="margin-bottom: 10%; text-align: center">
+                          <q-icon name="location_on" color="primary" />Résidence
+                        </h5>
+                        <q-select
+                          dense
+                          v-model="commune"
+                          label="Commune de résidence"
+                          type="text"
+                          :rules="[(val) => !!val || 'Champ requis']"
+                        />
+                        <q-select
+                          dense
+                          v-model="quartier"
+                          label="Quartier de résidence"
+                          type="text"
+                          :rules="[(val) => !!val || 'Champ requis']"
+                        />
+                        <q-select
+                          dense
+                          v-model="avenue"
+                          label="Avenue"
+                          type="text"
+                          :rules="[(val) => !!val || 'Champ requis']"
+                        />
+                        <q-input
+                          dense
+                          v-model="num_maison"
+                          label="Numero Maison"
+                          type="number"
+                          :rules="[(val) => !!val || 'Champ requis']"
+                        />
+                      </div>
                     </q-form>
                   </li>
                 </ul>
@@ -224,86 +236,89 @@
                 </div>
                 <ul class="box-info">
                   <li class="aos-item" data-aos="zoom-in-right">
-
                     <q-form>
                       <div class="sudb">
-                        <h5 style="margin-bottom: 10%; text-align: center;"><q-icon name="edit" color="primary"/> Identification</h5>
+                        <h5 style="margin-bottom: 10%; text-align: center">
+                          <q-icon name="edit" color="primary" /> Identification
+                        </h5>
                         <q-input
-                        dense
-                        v-model="nom_m"
-                        label="Nom de la mère"
-                        type="text"
-                        :rules="[(val) => !!val || 'Champ requis']"
-                      />
-                      <q-input
-                        dense
-                        v-model="postnom_m"
-                        label="Postnom"
-                        type="text"
-                        :rules="[(val) => !!val || 'Champ requis']"
-                      />
-                      <q-input
-                        dense
-                        v-model="prenom_m"
-                        label="Prenom"
-                        type="text"
-                        :rules="[(val) => !!val || 'Champ requis']"
-                      />
-                      <q-input
-                        dense
-                        v-model="l_naiss_m"
-                        label="Lieu de naissance"
-                        type="text"
-                        :rules="[(val) => !!val || 'Champ requis']"
-                      />
-                      <q-input
-                        dense
-                        v-model="d_naiss_m"
-                        label="Date de Naissance"
-                        type="date"
-                        :rules="[(val) => !!val || 'Champ requis']"
-                      />
+                          dense
+                          v-model="nom_m"
+                          label="Nom de la mère"
+                          type="text"
+                          :rules="[(val) => !!val || 'Champ requis']"
+                        />
+                        <q-input
+                          dense
+                          v-model="postnom_m"
+                          label="Postnom"
+                          type="text"
+                          :rules="[(val) => !!val || 'Champ requis']"
+                        />
+                        <q-input
+                          dense
+                          v-model="prenom_m"
+                          label="Prenom"
+                          type="text"
+                          :rules="[(val) => !!val || 'Champ requis']"
+                        />
+                        <q-input
+                          dense
+                          v-model="l_naiss_m"
+                          label="Lieu de naissance"
+                          type="text"
+                          :rules="[(val) => !!val || 'Champ requis']"
+                        />
+                        <q-input
+                          dense
+                          v-model="d_naiss_m"
+                          label="Date de Naissance"
+                          type="date"
+                          :rules="[(val) => !!val || 'Champ requis']"
+                        />
                       </div>
 
                       <div class="sudb">
-                      <h5 style="margin-bottom: 10%; text-align: center;"><q-icon name="home" color="primary"/>Origine</h5>
-                       <q-select
-                      v-model="pays"
-                        label="Pays de résidence"
-                        type="text"
-                      dense
-                      :rules="[(val) => !!val || 'Champ requis']"
-                    />
-                      <q-select
-                        dense
-                        v-model="province"
-                        :options="option_province"
-                        label="Province d'origine"
-                        type="text"
-                        :rules="[(val) => !!val || 'Champ requis']"
-                      />
-                    <q-select
-                    v-model="territoire"
-                      :options="options_territoire"
-                      label="Territoire"
-                      dense
-                      :rules="[(val) => !!val || 'Champ requis']"
-                    />
-                      <q-select
-                    v-model="groupement"
-                      :options="options_groupement"
-                      label="Groupement"
-                      dense
-                      :rules="[(val) => !!val || 'Champ requis']"
-                    />
-                     <q-select
-                    v-model="village"
-                      :options="options_village"
-                      label="Village"
-                      dense
-                      :rules="[(val) => !!val || 'Champ requis']"
-                    />
-                    <!-- <q-select
+                        <h5 style="margin-bottom: 10%; text-align: center">
+                          <q-icon name="home" color="primary" />Origine
+                        </h5>
+                        <q-select
+                          v-model="pays"
+                          label="Pays de résidence"
+                          type="text"
+                          dense
+                          :rules="[(val) => !!val || 'Champ requis']"
+                        />
+                        <q-select
+                          dense
+                          v-model="province"
+                          :options="option_province"
+                          label="Province d'origine"
+                          type="text"
+                          :rules="[(val) => !!val || 'Champ requis']"
+                        />
+                        <q-select
+                          v-model="territoire"
+                          :options="options_territoire"
+                          label="Territoire"
+                          dense
+                          :rules="[(val) => !!val || 'Champ requis']"
+                        />
+                        <q-select
+                          v-model="groupement"
+                          :options="options_groupement"
+                          label="Groupement"
+                          dense
+                          :rules="[(val) => !!val || 'Champ requis']"
+                        />
+                        <q-select
+                          v-model="village_p"
+                          :options="options_village"
+                          label="Village"
+                          dense
+                          :rules="[(val) => !!val || 'Champ requis']"
+                        />
+                        <!-- <q-select
                       v-model="groupement"
                       use-input
                       input-debounce="0"
@@ -314,38 +329,40 @@
 
                       behavior="menu"
                     /> -->
-                     </div>
-                     <div class="sudb">
-                      <h5 style="margin-bottom: 10%; text-align: center;"><q-icon name="location_on" color="primary"/>Résidence</h5>
-                      <q-select
-                        dense
-                        v-model="commune"
-                        label="Commune de résidence"
-                        type="text"
-                        :rules="[(val) => !!val || 'Champ requis']"
-                      />
-                      <q-select
-                        dense
-                        v-model="quartier"
-                        label="Quartier de résidence"
-                        type="text"
-                        :rules="[(val) => !!val || 'Champ requis']"
-                      />
-                      <q-select
-                        dense
-                        v-model="avenue"
-                        label="Avenue"
-                        type="text"
-                        :rules="[(val) => !!val || 'Champ requis']"
-                      />
-                      <q-input
-                        dense
-                        v-model="num_maison"
-                        label="Numero Maison"
-                        type="number"
-                        :rules="[(val) => !!val || 'Champ requis']"
-                      />
-                     </div>
+                      </div>
+                      <div class="sudb">
+                        <h5 style="margin-bottom: 10%; text-align: center">
+                          <q-icon name="location_on" color="primary" />Résidence
+                        </h5>
+                        <q-select
+                          dense
+                          v-model="commune"
+                          label="Commune de résidence"
+                          type="text"
+                          :rules="[(val) => !!val || 'Champ requis']"
+                        />
+                        <q-select
+                          dense
+                          v-model="quartier"
+                          label="Quartier de résidence"
+                          type="text"
+                          :rules="[(val) => !!val || 'Champ requis']"
+                        />
+                        <q-select
+                          dense
+                          v-model="avenue"
+                          label="Avenue"
+                          type="text"
+                          :rules="[(val) => !!val || 'Champ requis']"
+                        />
+                        <q-input
+                          dense
+                          v-model="num_maison"
+                          label="Numero Maison"
+                          type="number"
+                          :rules="[(val) => !!val || 'Champ requis']"
+                        />
+                      </div>
                     </q-form>
                   </li>
                 </ul>
@@ -377,100 +394,103 @@
 
                 <ul class="box-info">
                   <li class="aos-item" data-aos="zoom-in-right">
-
                     <q-form>
                       <div class="sudb">
-                        <h5 style="margin-bottom: 10%; text-align: center;"><q-icon name="edit" color="primary"/> Identification</h5>
+                        <h5 style="margin-bottom: 10%; text-align: center">
+                          <q-icon name="edit" color="primary" /> Identification
+                        </h5>
                         <q-input
-                        dense
-                        v-model="nom"
-                        label="Nom de la personne"
-                        type="text"
-                        :rules="[(val) => !!val || 'Champ requis']"
-                      />
-                      <q-input
-                        dense
-                        v-model="postnom"
-                        label="Postnom"
-                        type="text"
-                        :rules="[(val) => !!val || 'Champ requis']"
-                      />
-                      <q-input
-                        dense
-                        v-model="prenom"
-                        label="Prenom"
-                        type="text"
-                        :rules="[(val) => !!val || 'Champ requis']"
-                      >
-                    </q-input>
-                      <q-select
-                        v-model="sexe"
-                        :options="options_genre"
-                        label="Genre"
-                        dense
-                        :rules="[(val) => !!val || 'Champ requis']"
-                      />
-                      <q-input
-                        dense
-                        v-model="l_naiss"
-                        label="Lieu de naissance"
-                        type="text"
-                        :rules="[(val) => !!val || 'Champ requis']"
-                      />
-                      <q-input
-                        dense
-                        v-model="d_naiss"
-                        label="Date de Naissance"
-                        type="date"
-                        :rules="[(val) => !!val || 'Champ requis']"
-                      />
-                      <q-select
-                      v-model="couleur_oeil"
-                      :options="options_eye"
-                      label="Couleur oeil"
-                      dense
-                      :rules="[(val) => !!val || 'Champ requis']"
-                    />
+                          dense
+                          v-model="nom"
+                          label="Nom de la personne"
+                          type="text"
+                          :rules="[(val) => !!val || 'Champ requis']"
+                        />
+                        <q-input
+                          dense
+                          v-model="postnom"
+                          label="Postnom"
+                          type="text"
+                          :rules="[(val) => !!val || 'Champ requis']"
+                        />
+                        <q-input
+                          dense
+                          v-model="prenom"
+                          label="Prenom"
+                          type="text"
+                          :rules="[(val) => !!val || 'Champ requis']"
+                        >
+                        </q-input>
+                        <q-select
+                          v-model="sexe"
+                          :options="options_genre"
+                          label="Genre"
+                          dense
+                          :rules="[(val) => !!val || 'Champ requis']"
+                        />
+                        <q-input
+                          dense
+                          v-model="l_naiss"
+                          label="Lieu de naissance"
+                          type="text"
+                          :rules="[(val) => !!val || 'Champ requis']"
+                        />
+                        <q-input
+                          dense
+                          v-model="d_naiss"
+                          label="Date de Naissance"
+                          type="date"
+                          :rules="[(val) => !!val || 'Champ requis']"
+                        />
+                        <q-select
+                          v-model="couleur_oeil"
+                          :options="options_eye"
+                          label="Couleur oeil"
+                          dense
+                          :rules="[(val) => !!val || 'Champ requis']"
+                        />
                       </div>
-                     <div class="sudb">
-                      <h5 style="margin-bottom: 10%; text-align: center;"><q-icon name="home" color="primary"/>Origine</h5>
-                       <q-select
-                      v-model="pays"
-                        label="Pays de résidence"
-                        type="text"
-                      dense
-                      :rules="[(val) => !!val || 'Champ requis']"
-                    />
-                      <q-select
-                        dense
-                        v-model="province"
-                        :options="option_province"
-                        label="Province d'origine"
-                        type="text"
-                        :rules="[(val) => !!val || 'Champ requis']"
-                      />
-                    <q-select
-                    v-model="territoire"
-                      :options="options_territoire"
-                      label="Territoire"
-                      dense
-                      :rules="[(val) => !!val || 'Champ requis']"
-                    />
-                      <q-select
-                    v-model="groupement"
-                      :options="options_groupement"
-                      label="Groupement"
-                      dense
-                      :rules="[(val) => !!val || 'Champ requis']"
-                    />
-                     <q-select
-                    v-model="village"
-                      :options="options_village"
-                      label="Village"
-                      dense
-                      :rules="[(val) => !!val || 'Champ requis']"
-                    />
-                    <!-- <q-select
+                      <div class="sudb">
+                        <h5 style="margin-bottom: 10%; text-align: center">
+                          <q-icon name="home" color="primary" />Origine
+                        </h5>
+                        <q-select
+                          v-model="pays"
+                          label="Pays de résidence"
+                          type="text"
+                          dense
+                          :rules="[(val) => !!val || 'Champ requis']"
+                        />
+                        <q-select
+                          dense
+                          v-model="province"
+                          :options="option_province"
+                          label="Province d'origine"
+                          type="text"
+                          :rules="[(val) => !!val || 'Champ requis']"
+                        />
+                        <q-select
+                          v-model="territoire"
+                          :options="options_territoire"
+                          label="Territoire"
+                          dense
+                          :rules="[(val) => !!val || 'Champ requis']"
+                        />
+                        <q-select
+                          v-model="groupement"
+                          :options="options_groupement"
+                          label="Groupement"
+                          dense
+                          :rules="[(val) => !!val || 'Champ requis']"
+                        />
+                        <q-select
+                          v-model="village"
+                          :options="options_village"
+                          label="Village"
+                          dense
+                          :rules="[(val) => !!val || 'Champ requis']"
+                        />
+                        <!-- <q-select
                       v-model="groupement"
                       use-input
                       input-debounce="0"
@@ -481,39 +501,40 @@
 
                       behavior="menu"
                     /> -->
-                     </div>
-                     <div class="sudb">
-                      <h5 style="margin-bottom: 10%; text-align: center;"><q-icon name="location_on" color="primary"/>Résidence</h5>
-                      <q-select
-                        dense
-                        v-model="commune"
-                        label="Commune de résidence"
-                        type="text"
-                        :rules="[(val) => !!val || 'Champ requis']"
-                      />
-                      <q-select
-                        dense
-                        v-model="quartier"
-                        label="Quartier de résidence"
-                        type="text"
-                        :rules="[(val) => !!val || 'Champ requis']"
-                      />
-                      <q-select
-                        dense
-                        v-model="avenue"
-                        label="Avenue"
-                        type="text"
-                        :rules="[(val) => !!val || 'Champ requis']"
-                      />
-                      <q-input
-                        dense
-                        v-model="num_maison"
-                        label="Numero Maison"
-                        type="number"
-                        :rules="[(val) => !!val || 'Champ requis']"
-                      />
-                     </div>
-
+                      </div>
+                      <div class="sudb">
+                        <h5 style="margin-bottom: 10%; text-align: center">
+                          <q-icon name="location_on" color="primary" />Résidence
+                        </h5>
+                        <q-select
+                          dense
+                          v-model="commune"
+                          label="Commune de résidence"
+                          type="text"
+                          :rules="[(val) => !!val || 'Champ requis']"
+                        />
+                        <q-select
+                          dense
+                          v-model="quartier"
+                          label="Quartier de résidence"
+                          type="text"
+                          :rules="[(val) => !!val || 'Champ requis']"
+                        />
+                        <q-select
+                          dense
+                          v-model="avenue"
+                          label="Avenue"
+                          type="text"
+                          :rules="[(val) => !!val || 'Champ requis']"
+                        />
+                        <q-input
+                          dense
+                          v-model="num_maison"
+                          label="Numero Maison"
+                          type="number"
+                          :rules="[(val) => !!val || 'Champ requis']"
+                        />
+                      </div>
                     </q-form>
                   </li>
                 </ul>
@@ -600,6 +621,7 @@ import { useRouter } from "vue-router";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import { useStore } from "src/stores/store";
+import { usePersonneN } from "src/stores/storePersonneN";
 
 export default {
   // components: { TablePart,ArbreGen },
@@ -607,6 +629,7 @@ export default {
     const router = useRouter();
     // Gestion des notifications et loading process
     const $q = useQuasar();
+    const p = usePersonneN();
     let timer;
     onBeforeUnmount(() => {
       if (timer !== void 0) {
@@ -680,105 +703,19 @@ export default {
     });
     const options_groupement = ref([data_groupement]);
     // Enregistrement d'une nouvelle personne
-    const submitForm = () => {
-      // circular progress
-      $q.loading.show({
-        message:
-          'Requête en cours.<br/><span class="text-amber text-italic">Veuillez patienter...</span>',
-        html: true,
+    const submitForm = () => {};
+    //recherche
+    const search = () => {
+      p.getpers({
+        nom: nom_p.value,
+        postnom: postnom_p.value,
+        prenom: prenom_p.value,
+      }).then((res) => {
+        console.log(res);
       });
-      // hiding in 3s
-      timer = setTimeout(() => {
-        const xperson = {
-          nom_p: nom_p.value,
-          postnom_p: postnom_p.value,
-          prenom_p: prenom_p.value,
-          d_naiss_p: d_naiss_p.value,
-          l_naiss_p: l_naiss_p.value,
-          id_groupement_p: groupement_p.value.value,
-          pays_p: pays_p.value,
-          ville_p: ville_p.value,
-          commune_p: commune_p.value,
-          quartier_p: quartier_p.value,
-          id_avenue_p: avenue_p.value,
-          num_maison_p: num_maison_p.value,
-          nom_m: nom_m.value,
-          postnom_m: postnom_m.value,
-          prenom_m: prenom_m.value,
-          d_naiss_m: d_naiss_m.value,
-          l_naiss_m: l_naiss_m.value,
-          id_groupement_m: groupement_m.value.value,
-          pays_m: pays_m.value,
-          ville_m: ville_m.value,
-          commune_m: commune_m.value,
-          quartier_m: quartier_m.value,
-          id_avenue_m: avenue_m.value,
-          num_maison_m: num_maison_m.value,
-          nom: nom.value,
-          postnom: postnom.value,
-          prenom: prenom.value,
-          sexe: sexe.value,
-          d_naiss: d_naiss.value,
-          l_naiss: l_naiss.value,
-          id_groupement: groupement.value.value,
-          pays: pays.value,
-          ville: ville.value,
-          commune: commune.value,
-          quartier: quartier.value,
-          id_avenue: avenue.value,
-          num_maison: num_maison.value,
-          couleur_oeil: couleur_oeil.value,
-          id_partenaire: 1,
-        };
-        // console.log(xperson);
-        store.ajouterPersonne_step(
-          xperson.nom_p,
-          xperson.postnom_p,
-          xperson.prenom_p,
-          xperson.d_naiss_p,
-          xperson.l_naiss_p,
-          xperson.id_groupement_p,
-          xperson.pays_p,
-          xperson.ville_p,
-          xperson.commune_p,
-          xperson.quartier_p,
-          xperson.id_avenue_p,
-          xperson.num_maison_p,
-          xperson.nom_m,
-          xperson.postnom_m,
-          xperson.prenom_m,
-          xperson.d_naiss_m,
-          xperson.l_naiss_m,
-          xperson.id_groupement_m,
-          xperson.pays_m,
-          xperson.ville_m,
-          xperson.commune_m,
-          xperson.quartier_m,
-          xperson.id_avenue_m,
-          xperson.num_maison_m,
-          xperson.nom,
-          xperson.postnom,
-          xperson.prenom,
-          xperson.d_naiss,
-          xperson.sexe,
-          xperson.l_naiss,
-          xperson.id_groupement,
-          xperson.pays,
-          xperson.ville,
-          xperson.commune,
-          xperson.quartier,
-          xperson.id_avenue,
-          xperson.num_maison,
-          xperson.couleur_oeil,
-          xperson.id_partenaire
-        );
-        persistent = true;
-        $q.loading.hide();
-        timer = void 0;
-      }, 2000);
     };
-
     return {
+      search,
       timer,
       $q,
       router,
@@ -1024,10 +961,10 @@ h1 {
   text-align: left;
   border-bottom: 1px solid #eee;
 }
-.sudb{
+.sudb {
   background-color: inherit;
   border: none;
-  color : rgb(10, 10, 10);
+  color: rgb(10, 10, 10);
   width: inherit;
   margin-bottom: 10%;
   border-radius: 5%;
