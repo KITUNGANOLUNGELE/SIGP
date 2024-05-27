@@ -8,7 +8,7 @@ export const useAvenueN = defineStore("uAvenueN", {
   actions: {
     async getavenue() {
       let data = await axios.get(
-        "http://localhost:8888/sigp/avenue/get/all?user=hibaigle&mdp=mdp"
+        "http://localhost/sigp/avenue/get/all?user=hibaigle&mdp=mdp"
       );
       return data;
     },

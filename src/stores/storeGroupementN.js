@@ -8,7 +8,7 @@ export const useGroupeN = defineStore("uGroupeN", {
   actions: {
     async getgroupement() {
       let data = await axios.get(
-        "http://localhost:8888/sigp/groupement/get/all?user=hibaigle&mdp=mdp"
+        "http://localhost/sigp/groupement/get/all?user=hibaigle&mdp=mdp"
       );
       return data;
     },
