@@ -10,7 +10,7 @@ export const useProvN = defineStore("uProvN", {
       let data = await axios.get(
         "http://localhost/sigp/province/get/all?user=hibaigle&mdp=mdp"
       );
-      return data;
+      return data.data.response;
     },
   },
 });

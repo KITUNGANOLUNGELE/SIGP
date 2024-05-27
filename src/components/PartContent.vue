@@ -12,7 +12,6 @@
       <li class="aos-item" data-aos="zoom-in-right">
         <q-icon class="bx" name="supervisor_account" />
         <span class="text">
-          <h3>{{ store.getNaissances }}</h3>
           <p>Nouveaux nés</p>
         </span>
       </li>
@@ -130,6 +129,8 @@
                           v-model="pays"
                           label="Pays de résidence"
                           type="text"
+                          :options="les_pays"
+                          behavior="menu"
                           dense
                           :rules="[(val) => !!val || 'Champ requis']"
                         >
@@ -137,10 +138,9 @@
                             <q-icon name="language" color="primary" />
                           </template>
                         </q-select>
-                        <q-select
+                        <q-select v-if="pays.length > 0"
                           dense
                           v-model="province_p"
-                          :options="option_province"
                           label="Province d'origine"
                           type="text"
                           :rules="[(val) => !!val || 'Champ requis']"
@@ -347,6 +347,8 @@
                           v-model="pays_m"
                           label="Pays de résidence"
                           type="text"
+                          :options="les_pays"
+                          behavior="menu"
                           dense
                           :rules="[(val) => !!val || 'Champ requis']"
                         />
@@ -547,6 +549,7 @@
                           v-model="couleur_oeil"
                           :options="options_eye"
                           label="Couleur oeil"
+                          behavior="menu"
                           dense
                           :rules="[(val) => !!val || 'Champ requis']"
                         />
@@ -559,34 +562,41 @@
                           v-model="pays"
                           label="Pays de résidence"
                           type="text"
+                          :options="les_pays"
+                          behavior="menu"
+                          @update:model-value="searchProv(pays)"
                           dense
                           :rules="[(val) => !!val || 'Champ requis']"
                         />
-                        <q-select
+                        <q-select v-if="prov"
                           dense
                           v-model="province"
-                          :options="option_province"
                           label="Province d'origine"
                           type="text"
+                          behavior="menu"
+                          @update:model-value="searchTerr(province)"
                           :rules="[(val) => !!val || 'Champ requis']"
                         />
                         <q-select
+                        v-if="terr"
                           v-model="territoire"
-                          :options="options_territoire"
                           label="Territoire"
                           dense
+                          @update:model-value="searchGroup(territoire)"
+                          behavior="menu"
                           :rules="[(val) => !!val || 'Champ requis']"
                         />
                         <q-select
+                        v-if="group"
                           v-model="groupement"
-                          :options="options_groupement"
                           label="Groupement"
                           dense
+                          @update:model-value="searchCol(groupement)"
                           :rules="[(val) => !!val || 'Champ requis']"
                         />
                         <q-select
-                          v-model="village"
-                          :options="options_village"
+                          v-if="col"
+                          v-model="groupement"
                           label="Village"
                           dense
                           :rules="[(val) => !!val || 'Champ requis']"
@@ -753,12 +763,12 @@ export default {
     const prenom_p = ref("");
     const l_naiss_p = ref("");
     const d_naiss_p = ref("");
-    const groupement_p = ref("");
-    const pays_p = ref("");
-    const ville_p = ref("");
-    const commune_p = ref("");
-    const quartier_p = ref("");
-    const avenue_p = ref("");
+    const groupement_p = ref(null);
+    const pays_p = ref(null);
+    const ville_p = ref(null);
+    const commune_p = ref(null);
+    const quartier_p = ref(null)
+    const avenue_p = ref(null);
     const num_maison_p = ref("");
     // infos de la mere
     const nom_m = ref("");
@@ -766,12 +776,12 @@ export default {
     const prenom_m = ref("");
     const l_naiss_m = ref("");
     const d_naiss_m = ref("");
-    const groupement_m = ref("");
-    const pays_m = ref("");
-    const ville_m = ref("");
-    const commune_m = ref("");
-    const quartier_m = ref("");
-    const avenue_m = ref("");
+    const groupement_m = ref(null)
+    const pays_m = ref(null);
+    const ville_m = ref(null);
+    const commune_m = ref(null);
+    const quartier_m = ref(null);
+    const avenue_m = ref(null);
     const num_maison_m = ref("");
     // infos de la nouvelle personne
     const nom = ref("");
@@ -781,12 +791,12 @@ export default {
     const l_naiss = ref("");
     const d_naiss = ref("");
     const couleur_oeil = ref("");
-    const groupement = ref("");
-    const pays = ref("");
-    const ville = ref("");
-    const commune = ref("");
-    const quartier = ref("");
-    const avenue = ref("");
+    const groupement = ref(null);
+    const pays = ref(null);
+    const ville = ref(null);
+    const commune = ref(null);
+    const quartier = ref(null);
+    const avenue = ref(null);
     const num_maison = ref("");
 
     let persistent = false;
@@ -869,15 +879,60 @@ export default {
     const les_pays = ref ([])
     const storepays = usePaysN();
     storepays.getpays().then(res=>{
-      res.forEach(element => {
+      console.log(res);
+      res.data.response.forEach(element => {
         les_pays.value.push({
           label : element.nom_pays,
           value : element.id
         })
       });
     })
+    //fin recuperer Pays
+
+    //montrer les provinces
+    const prov = ref(false);
+    const searchProv = (s) =>{
+      prov.value = true
+      console.log(s.value + " "+ s.label)
+      //code
+    }
+    //fin montrer Province
+
+    //montrer territoire
+    const terr = ref(false);
+    const searchTerr = (s) =>{
+      terr.value = true
+      console.log(s.value + " "+ s.label)
+      //code
+    }
+    //fin montrer territoire
+     //montrer groupement
+     const group = ref(false);
+    const searchGroup = (s) =>{
+      group.value = true
+      console.log(s.value + " "+ s.label)
+      //code
+    }
+    //fin montrer groupement
+
+     //montrer collectivite
+     const col = ref(false);
+    const searchCol = (s) =>{
+      col.value = true
+      console.log(s.value + " "+ s.label)
+      //code
+    }
+    //fin montrer collectivite
 
     return {
+      group,
+      searchGroup,
+      col,
+      searchCol,
+      terr,
+      searchTerr,
+      prov,
+      searchProv,
       les_pays,
       search,
       recupMere,
@@ -943,20 +998,6 @@ export default {
         position.value = pos;
         dialog.value = true;
       },
-      filterFn(val, update) {
-        if (val === "") {
-          update(() => {
-            options_groupement.value = data_groupement;
-          });
-          return;
-        }
-        update(() => {
-          const needle = val.toLowerCase();
-          options_groupement.value = data_groupement.filter(
-            (v) => v.label.toLowerCase().indexOf(needle) > -1
-          );
-        });
-      },
       groupe_type,
       groupe_Types,
       groupement_Type,
@@ -965,24 +1006,6 @@ export default {
   name: "UserAccountChart",
   mounted() {
     this.renderChart();
-  },
-  computed: {
-    isNextButtonDisabled() {
-      return !(
-        this.nom_p &&
-        this.postnom_p &&
-        this.prenom_p &&
-        this.l_naiss_p &&
-        this.d_naiss_p &&
-        this.groupement_p &&
-        this.pays_p &&
-        this.ville_p &&
-        this.commune_p &&
-        this.quartier_p &&
-        this.avenue_p &&
-        this.num_maison_p
-      );
-    },
   },
   methods: {
     renderChart() {

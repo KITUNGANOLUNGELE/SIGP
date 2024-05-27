@@ -16,7 +16,7 @@ export const useVilleN = defineStore("uVilleN", {
   async saveville(v){
     let d = new FormData();
     d.append("nom_ville",v.nom_ville)
-    let data = await axios.post("http://localhost:8888/sigp/ville/save?user=hibaigle&mdp=mdp",d);
+    let data = await axios.post("http://localhost/sigp/ville/save?user=hibaigle&mdp=mdp",d);
     return data;
   }
 
