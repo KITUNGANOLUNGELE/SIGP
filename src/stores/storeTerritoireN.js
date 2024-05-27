@@ -6,12 +6,9 @@ export const useTerriN = defineStore("uTerriN", {
   }),
   getters: {},
   actions: {
-    async getterritoire(s) {
-      let t = new FormData();
-      t.append("nom", s.nom);
-      let data = await axios.post(
-        "http://localhost:8888/sigp/territoire/get/all?user=hibaigle&mdp=mdp",
-        t
+    async getterritoire() {
+      let data = await axios.get(
+        "http://localhost/sigp/territoire/get/all?user=hibaigle&mdp=mdp"
       );
       return data;
     },

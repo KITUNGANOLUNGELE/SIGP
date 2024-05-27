@@ -19,7 +19,7 @@ export const usePersonneN = defineStore("uPersN", {
       f.append("lieu_naissance", s.lieu_naissance);
       f.append("num_maison", s.num_maison);
       let data = await axios.post(
-        "http://localhost:8888/sigp/personne/get_by_names/?user=hibaigle&mdp=mdp",
+        "http://localhost/sigp/personne/get_by_names/?user=hibaigle&mdp=mdp",
         f
       );
       return data;

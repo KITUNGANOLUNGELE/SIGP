@@ -6,12 +6,9 @@ export const useVilleN = defineStore("uVilleN", {
   }),
   getters: {},
   actions: {
-    async getville(s) {
-      let l = new FormData();
-      l.append("nom", s.nom);
-      let data = await axios.post(
-        "http://localhost:8888/sigp/ville/get/all?user=hibaigle&mdp=mdp",
-        l
+    async getville() {
+      let data = await axios.get(
+        "http://localhost/sigp/ville/get/all?user=hibaigle&mdp=mdp"
       );
       return data;
     },

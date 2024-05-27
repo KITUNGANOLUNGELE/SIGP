@@ -6,12 +6,9 @@ export const usePaysN = defineStore("uPaysN", {
   }),
   getters: {},
   actions: {
-    async getpays(s) {
-      let y = new FormData();
-      y.append("nom", s.nom);
-      let data = await axios.post(
-        "http://localhost:8888/sigp/pays/get/one?user=hibaigle&mdp=mdp",
-        y
+    async getpays() {
+      let data = await axios.get(
+        "http://localhost/sigp/pays/get/all?user=hibaigle&mdp=mdp"
       );
       return data;
     },
