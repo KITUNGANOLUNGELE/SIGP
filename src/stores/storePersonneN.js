@@ -3,7 +3,9 @@ import axios from "axios";
 
 export const usePersonneN = defineStore("uPersN", {
   state: () => ({
-    personne: [],
+    personne: null,
+    pere : null,
+    mere : null
   }),
   getters: {},
   actions: {
@@ -22,5 +24,12 @@ export const usePersonneN = defineStore("uPersN", {
       );
       return data;
     },
+    setPere(s){
+      this.pere = s
+    },
+    setMere(s){
+      this.mere = s
+    },
+
   },
 });

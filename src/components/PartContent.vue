@@ -58,7 +58,8 @@
                           v-model="nom_p"
                           label="Nom du Père"
                           type="text"
-                          @keypress="search"
+                          @keydown="search"
+                          @keyup="search"
                           :rules="[(val) => !!val || 'Champ requis']"
                         >
                           <template v-slot:prepend>
@@ -70,7 +71,8 @@
                           v-model="postnom_p"
                           label="Postnom"
                           type="text"
-                          @keypress="search"
+                          @keydown="search"
+                          @keyup="search"
                           :rules="[(val) => !!val || 'Champ requis']"
                         >
                           <template v-slot:prepend>
@@ -82,7 +84,8 @@
                           v-model="prenom_p"
                           label="Prenom"
                           type="text"
-                          @keypress="search"
+                          @keydown="search"
+                          @keyup="search"
                           :rules="[(val) => !!val || 'Champ requis']"
                         >
                           <template v-slot:prepend>
@@ -95,7 +98,9 @@
                           label="Lieu de naissance"
                           type="text"
                           behavior="menu"
-                          options = ""
+                          options=""
+                          @keydown="search"
+                          @keyup="search"
                           :rules="[(val) => !!val || 'Champ requis']"
                         >
                           <template v-slot:prepend>
@@ -116,7 +121,7 @@
                         </q-input>
                       </div>
 
-                      <div class="sudb">
+                      <div class="sudb" v-if="show_complete">
                         <h5 style="margin-bottom: 10%; text-align: center">
                           <q-icon name="home" color="primary" /> Origine
                         </h5>
@@ -134,28 +139,28 @@
                         </q-select>
                         <q-select
                           dense
-                          v-model="province"
+                          v-model="province_p"
                           :options="option_province"
                           label="Province d'origine"
                           type="text"
                           :rules="[(val) => !!val || 'Champ requis']"
                         />
                         <q-select
-                          v-model="territoire"
+                          v-model="territoire_p"
                           :options="options_territoire"
                           label="Territoire"
                           dense
                           :rules="[(val) => !!val || 'Champ requis']"
                         />
                         <q-select
-                          v-model="groupement"
+                          v-model="groupement_p"
                           :options="options_groupement"
                           label="Groupement"
                           dense
                           :rules="[(val) => !!val || 'Champ requis']"
                         />
                         <q-select
-                          v-model="village"
+                          v-model="village_p"
                           :options="options_village"
                           label="Village"
                           dense
@@ -173,38 +178,86 @@
                       behavior="menu"
                     /> -->
                       </div>
-                      <div class="sudb">
+                      <div class="sudb" v-if="show_complete">
                         <h5 style="margin-bottom: 10%; text-align: center">
                           <q-icon name="location_on" color="primary" />Résidence
                         </h5>
                         <q-select
                           dense
-                          v-model="commune"
+                          v-model="commune_p"
                           label="Commune de résidence"
                           type="text"
                           :rules="[(val) => !!val || 'Champ requis']"
                         />
                         <q-select
                           dense
-                          v-model="quartier"
+                          v-model="quartier_p"
                           label="Quartier de résidence"
                           type="text"
                           :rules="[(val) => !!val || 'Champ requis']"
                         />
                         <q-select
                           dense
-                          v-model="avenue"
+                          v-model="avenue_p"
                           label="Avenue"
                           type="text"
                           :rules="[(val) => !!val || 'Champ requis']"
                         />
                         <q-input
                           dense
-                          v-model="num_maison"
+                          v-model="num_maison_p"
                           label="Numero Maison"
                           type="number"
                           :rules="[(val) => !!val || 'Champ requis']"
                         />
+                      </div>
+                      <!-- Show list existant -->
+                      <div
+                        v-if="show_list"
+                        style="
+                          margin: 0px;
+                          padding: 0px;
+                          box-sizing: border-box;
+                          width: inherit;
+                        "
+                      >
+                        <q-list bordered>
+                          <q-item
+                            clickable
+                            v-ripple
+                            v-for="item in results"
+                            :key="item.id"
+                            class="bg-blue-4"
+                            @click="recupPere(item)"
+                          >
+                            <q-item-section
+                              class="text-center text-white text-weight-bold"
+                            >
+                              <div class="row">
+                                <div class="col">
+                                  <span class="q-mr-sm"
+                                    ><q-icon name="face" color="white" /></span
+                                  >{{ item.nom }} {{ item.postnom }}
+                                  {{ item.prenom }}
+                                </div>
+                                <q-separator vertical color="white" />
+                                <div class="col">
+                                  <span class="q-mr-sm"
+                                    ><q-icon name="event" color="white" /></span
+                                  >Né le {{ item.date_naissance }}
+                                </div>
+                                <q-separator vertical color="white" />
+                                <div class="col">
+                                  <span class="q-mr-sm"
+                                    ><q-icon
+                                      name="location_on"
+                                      color="white" /></span
+                                  >Né à {{ item.lieu_naissance }}
+                                </div>
+                              </div>
+                            </q-item-section>
+                          </q-item>
+                        </q-list>
                       </div>
                     </q-form>
                   </li>
@@ -246,6 +299,8 @@
                           v-model="nom_m"
                           label="Nom de la mère"
                           type="text"
+                          @keydown="search"
+                          @keyup="search"
                           :rules="[(val) => !!val || 'Champ requis']"
                         />
                         <q-input
@@ -253,6 +308,8 @@
                           v-model="postnom_m"
                           label="Postnom"
                           type="text"
+                          @keydown="search"
+                          @keyup="search"
                           :rules="[(val) => !!val || 'Champ requis']"
                         />
                         <q-input
@@ -260,6 +317,8 @@
                           v-model="prenom_m"
                           label="Prenom"
                           type="text"
+                          @keydown="search"
+                          @keyup="search"
                           :rules="[(val) => !!val || 'Champ requis']"
                         />
                         <q-input
@@ -267,6 +326,7 @@
                           v-model="l_naiss_m"
                           label="Lieu de naissance"
                           type="text"
+                          @change="search"
                           :rules="[(val) => !!val || 'Champ requis']"
                         />
                         <q-input
@@ -274,16 +334,17 @@
                           v-model="d_naiss_m"
                           label="Date de Naissance"
                           type="date"
+                          @change="search"
                           :rules="[(val) => !!val || 'Champ requis']"
                         />
                       </div>
 
-                      <div class="sudb">
+                      <div class="sudb" v-if="show_complete">
                         <h5 style="margin-bottom: 10%; text-align: center">
                           <q-icon name="home" color="primary" />Origine
                         </h5>
                         <q-select
-                          v-model="pays"
+                          v-model="pays_m"
                           label="Pays de résidence"
                           type="text"
                           dense
@@ -291,28 +352,28 @@
                         />
                         <q-select
                           dense
-                          v-model="province"
+                          v-model="province_m"
                           :options="option_province"
                           label="Province d'origine"
                           type="text"
                           :rules="[(val) => !!val || 'Champ requis']"
                         />
                         <q-select
-                          v-model="territoire"
+                          v-model="territoire_m"
                           :options="options_territoire"
                           label="Territoire"
                           dense
                           :rules="[(val) => !!val || 'Champ requis']"
                         />
                         <q-select
-                          v-model="groupement"
+                          v-model="groupement_m"
                           :options="options_groupement"
                           label="Groupement"
                           dense
                           :rules="[(val) => !!val || 'Champ requis']"
                         />
                         <q-select
-                          v-model="village_p"
+                          v-model="village_m"
                           :options="options_village"
                           label="Village"
                           dense
@@ -330,38 +391,78 @@
                       behavior="menu"
                     /> -->
                       </div>
-                      <div class="sudb">
+                      <div class="sudb" v-if="show_complete">
                         <h5 style="margin-bottom: 10%; text-align: center">
                           <q-icon name="location_on" color="primary" />Résidence
                         </h5>
                         <q-select
                           dense
-                          v-model="commune"
+                          v-model="commune_m"
                           label="Commune de résidence"
                           type="text"
                           :rules="[(val) => !!val || 'Champ requis']"
                         />
                         <q-select
                           dense
-                          v-model="quartier"
+                          v-model="quartier_m"
                           label="Quartier de résidence"
                           type="text"
                           :rules="[(val) => !!val || 'Champ requis']"
                         />
                         <q-select
                           dense
-                          v-model="avenue"
+                          v-model="avenue_m"
                           label="Avenue"
                           type="text"
                           :rules="[(val) => !!val || 'Champ requis']"
                         />
                         <q-input
                           dense
-                          v-model="num_maison"
+                          v-model="num_maison_m"
                           label="Numero Maison"
                           type="number"
                           :rules="[(val) => !!val || 'Champ requis']"
                         />
+                      </div>
+                      <!-- Show list existant -->
+                      <div v-if="show_list">
+                        <q-list bordered>
+                          <q-item
+                            clickable
+                            v-ripple
+                            v-for="item in results"
+                            :key="item.id"
+                            class="bg-blue-4"
+                            @click="recupMere(item)"
+                          >
+                            <q-item-section
+                              class="text-center text-white text-weight-bold"
+                            >
+                              <div class="row">
+                                <div class="col">
+                                  <span class="q-mr-sm"
+                                    ><q-icon name="face" color="white" /></span
+                                  >{{ item.nom }} {{ item.postnom }}
+                                  {{ item.prenom }}
+                                </div>
+                                <q-separator vertical color="white" />
+                                <div class="col">
+                                  <span class="q-mr-sm"
+                                    ><q-icon name="event" color="white" /></span
+                                  >Né le {{ item.date_naissance }}
+                                </div>
+                                <q-separator vertical color="white" />
+                                <div class="col">
+                                  <span class="q-mr-sm"
+                                    ><q-icon
+                                      name="location_on"
+                                      color="white" /></span
+                                  >Né à {{ item.lieu_naissance }}
+                                </div>
+                              </div>
+                            </q-item-section>
+                          </q-item>
+                        </q-list>
                       </div>
                     </q-form>
                   </li>
@@ -637,11 +738,14 @@ export default {
         $q.loading.hide();
       }
     });
+
     const store = useStore();
     // Les variables
     const dialog = ref(false);
+    const show_list = ref(false);
+    const show_complete = ref(false);
     const position = ref("top");
-    const data_groupement = [];
+    const results = ref(null);
     // infos pere
     const nom_p = ref("");
     const postnom_p = ref("");
@@ -689,33 +793,79 @@ export default {
     const groupe_type = [];
     const groupe_Types = [];
     let groupement_Type = ref([]);
-    onMounted(() => {
-      // store.afficherNaissance();
-      store.afficherGroupement();
-    });
-    store.afficherGroupement().then((rest) => {
-      rest.forEach((element) => {
-        let datas = {};
-        datas.label = element.nom_groupement;
-        datas.value = element.id;
-        data_groupement.push(datas);
-      });
-    });
-    const options_groupement = ref([data_groupement]);
+
     // Enregistrement d'une nouvelle personne
     const submitForm = () => {};
-    //recherche
+    //recherche de la personne existante
     const search = () => {
+      if (p.pere) {
+        nom_p.value = "";
+        postnom_p.value = "";
+        prenom_p.value = "";
+        l_naiss_p.value = "";
+        d_naiss_p.value = "";
+        p.pere = null;
+      }
+      if (p.mere) {
+        nom_m.value = "";
+        postnom_m.value = "";
+        prenom_m.value = "";
+        l_naiss_m.value = "";
+        d_naiss_m.value = "";
+        p.mere = null;
+      }
       p.getpers({
-        nom: nom_p.value,
-        postnom: postnom_p.value,
-        prenom: prenom_p.value,
+        nom: nom_p.value != "" ? nom_p.value : nom_m.value,
+        postnom: postnom_p.value != "" ? postnom_p.value : postnom_m.value,
+        prenom: prenom_p.value != "" ? prenom_p.value : prenom_m.value,
       }).then((res) => {
-        console.log(res);
+        //console.log(nom_m.value);
+        results.value = null;
+        results.value = res.data.response;
+        if (results.value) {
+          if (nom_p.value.length > 0 || nom_m.value.length > 0) {
+            show_list.value = true;
+          }else{
+            show_list.value = false;
+          }
+          show_complete.value = false;
+        } else {
+          show_complete.value = true;
+          show_list.value = false;
+        }
+        // console.log(res);
       });
+    };
+
+    //recuperer le pere
+    const recupPere = (s) => {
+      nom_p.value = s.nom;
+      postnom_p.value = s.postnom;
+      prenom_p.value = s.prenom;
+      l_naiss_p.value = s.lieu_naissance;
+      d_naiss_p.value = s.date_naissance;
+      show_list.value = false;
+      p.setPere(s);
+      console.log(p.pere);
+    };
+    //recuperer mere
+    const recupMere = (s) => {
+      nom_m.value = s.nom;
+      postnom_m.value = s.postnom;
+      prenom_m.value = s.prenom;
+      l_naiss_m.value = s.lieu_naissance;
+      d_naiss_m.value = s.date_naissance;
+      show_list.value = false;
+      p.setMere(s);
+      console.log(p.mere);
     };
     return {
       search,
+      recupMere,
+      recupPere,
+      show_list,
+      show_complete,
+      results,
       timer,
       $q,
       router,
@@ -774,8 +924,6 @@ export default {
         position.value = pos;
         dialog.value = true;
       },
-      data_groupement,
-      options_groupement,
       filterFn(val, update) {
         if (val === "") {
           update(() => {
