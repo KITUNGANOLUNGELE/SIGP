@@ -723,6 +723,7 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import { useStore } from "src/stores/store";
 import { usePersonneN } from "src/stores/storePersonneN";
+import { usePaysN } from "src/stores/storePaysN";
 
 export default {
   // components: { TablePart,ArbreGen },
@@ -836,8 +837,9 @@ export default {
         // console.log(res);
       });
     };
+    //fin de la methode de recherche
 
-    //recuperer le pere
+    //recuperer le pere dans le store
     const recupPere = (s) => {
       nom_p.value = s.nom;
       postnom_p.value = s.postnom;
@@ -848,7 +850,9 @@ export default {
       p.setPere(s);
       console.log(p.pere);
     };
-    //recuperer mere
+    //fin recuperer pere
+
+    //recuperer mere dans le store
     const recupMere = (s) => {
       nom_m.value = s.nom;
       postnom_m.value = s.postnom;
@@ -859,7 +863,22 @@ export default {
       p.setMere(s);
       console.log(p.mere);
     };
+    //fin rucuperer mere
+
+    //recuperer les pays
+    const les_pays = ref ([])
+    const storepays = usePaysN();
+    storepays.getpays().then(res=>{
+      res.forEach(element => {
+        les_pays.value.push({
+          label : element.nom_pays,
+          value : element.id
+        })
+      });
+    })
+
     return {
+      les_pays,
       search,
       recupMere,
       recupPere,

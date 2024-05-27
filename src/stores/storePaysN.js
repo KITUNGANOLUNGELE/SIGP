@@ -13,9 +13,9 @@ export const usePaysN = defineStore("uPaysN", {
       return data;
     },
   },
-  async postpays(p){
+  async savePays(p){
     let d = new FormData();
-    d.append("nom", p.nom);
+    d.append("nom_pays", p.nom_pays);
     let data = await axios.post(
       "http://localhost/sigp/pays/save?user=hibaigle&mdp=mdp",
       d
