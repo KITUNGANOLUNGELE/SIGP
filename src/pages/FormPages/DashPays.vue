@@ -66,11 +66,13 @@ import SideBar from "src/components/SideBar.vue";
 import AsideIn from "src/components/Formulaires/AsideIn.vue";
 import FormPays from "src/components/Formulaires/FormPays.vue";
 
+
 export default {
   components: { SideBar, AsideIn, FormPays },
   setup() {
     const leftDrawerOpen = ref(false);
     const rightDrawerOpen = ref(false);
+
 
     return {
       drawer: false,

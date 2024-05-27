@@ -36,6 +36,7 @@
               v-model="xnom_pays"
               label="Nom Pays"
               type="text"
+
               required
             />
             <div class="q-pa-md">
@@ -51,7 +52,7 @@
             ></q-btn>
           </div>
           </q-form>
-        
+
         </q-card-section>
       </q-card>
     </q-dialog>
@@ -73,7 +74,7 @@
         <tr :key="index" v-for="(pay, index) in pays">
           <td class="text-left">{{ pay.id }}</td>
           <td class="text-left">{{ pay.nom_pays }}</td>
-        
+
         </tr>
       </tbody>
       </q-markup-table>
@@ -110,6 +111,7 @@ import { ref, onMounted, computed } from "vue";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import { useStorePays } from "src/stores/storePays";
+import {usePaysN } from "src/stores/storePaysN";
 // Route vers l'affichage du tableau des Administrateurs (Modifier et Supprimer)
 
 export default {
@@ -119,6 +121,7 @@ export default {
     const dialog = ref(false);
     const position = ref("top");
     const xnom_pays=ref('');
+    const p = usePaysN();
     const pays = computed(() => {
   return store.pays;
 });
@@ -136,7 +139,7 @@ onMounted(() => {
         dialog.value = true;
       },
       search: "",
-      
+
       showModal: false,
       editedUser: {
         id: null,
