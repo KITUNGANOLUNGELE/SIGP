@@ -13,4 +13,13 @@ export const usePaysN = defineStore("uPaysN", {
       return data;
     },
   },
+  async postpays(p){
+    let d = new FormData();
+    d.append("nom", p.nom);
+    let data = await axios.post(
+      "http://localhost/sigp/pays/save?user=hibaigle&mdp=mdp",
+      d
+    );
+    return data;
+  }
 });
