@@ -30,6 +30,21 @@ export const usePersonneN = defineStore("uPersN", {
     setMere(s){
       this.mere = s
     },
+    async save_PC(s){
+      let f = new FormData();
+      f.append("nom", s.nom);
+      f.append("postnom", s.postnom);
+      f.append("prenom", s.prenom);
+      f.append ("date_naissance", s.date_naissance);
+      f.append("sexe", s.sexe);
+      f.append("lieu_naissance", s.lieu_naissance);
+      f.append("id_partenaire", s.id_partenaire);
+      f.append("id_groupement", s.id_groupement);
+      f.append("id_avenue", s.id_avenue);
+      f.append("num_maison", s.num_maison);
+      let data = await axios.post("http://localhost/sigp/personne/savePC?user=hibaigle&mdp=mdp", f);
+      return data;
+    }
 
   },
 });
