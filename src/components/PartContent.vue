@@ -576,6 +576,7 @@
                           label="Province d'origine"
                           type="text"
                           behavior="menu"
+                          :options="les_prov"
                           @update:model-value="searchTerr(province)"
                           :rules="[(val) => !!val || 'Champ requis']"
                         />
@@ -584,25 +585,31 @@
                           v-model="territoire"
                           label="Territoire"
                           dense
-                          @update:model-value="searchGroup(territoire)"
+                          @update:model-value="searchCol(territoire)"
                           behavior="menu"
+                          :options="les_terr"
+                          :rules="[(val) => !!val || 'Champ requis']"
+                        />
+                        <q-select
+                          v-if="col"
+                          v-model="collectivite"
+                          label="Collectivite"
+                          dense
+                          behavior="menu"
+                          :options="les_col"
+                          @update:model-value="searchGroup(collectivite)"
                           :rules="[(val) => !!val || 'Champ requis']"
                         />
                         <q-select
                           v-if="group"
                           v-model="groupement"
                           label="Groupement"
+                          :options="les_group"
                           dense
-                          @update:model-value="searchCol(groupement)"
+                          behavior="menu"
                           :rules="[(val) => !!val || 'Champ requis']"
                         />
-                        <q-select
-                          v-if="col"
-                          v-model="groupement"
-                          label="Village"
-                          dense
-                          :rules="[(val) => !!val || 'Champ requis']"
-                        />
+
                         <!-- <q-select
                       v-model="groupement"
                       use-input
@@ -737,6 +744,9 @@ import { useStore } from "src/stores/store";
 import { usePersonneN } from "src/stores/storePersonneN";
 import { usePaysN } from "src/stores/storePaysN";
 import { useProvN } from "src/stores/storeProvinceN";
+import { useTerriN } from "src/stores/storeTerritoireN";
+import { useColleN } from "src/stores/storeCollectiviteN";
+import { useGroupeN } from "src/stores/storeGroupementN";
 
 export default {
   // components: { TablePart,ArbreGen },
@@ -882,7 +892,10 @@ export default {
     const les_pays = ref([]);
     const storepays = usePaysN();
     storepays.getpays().then((res) => {
-      console.log(res);
+      les_prov.value = [];
+      les_terr.value = [];
+      les_col.value = [];
+      les_group.value = [];
       res.data.response.forEach((element) => {
         les_pays.value.push({
           label: element.nom_pays,
@@ -897,7 +910,9 @@ export default {
     const les_prov = ref([]);
     const sprov = useProvN();
     const searchProv = (s) => {
-      sprov
+      les_prov.value = [];
+      if (s.label == 'RDC') {
+        sprov
         .getFromPays({
           id_pays: s.value,
         })
@@ -905,37 +920,85 @@ export default {
           prov.value = true;
           res.response.forEach((el) => {
             les_prov.value.push({
-              label : el.nom_province,
-              value : el.id
-            })
+              label: el.nom_province,
+              value: el.id,
+            });
           });
         });
+      } else{
+        prov.value = false;
+        terr.value = false;
+        col.value= false;
+        group.value=false;
+      }
       //code
     };
     //fin montrer Province
 
     //montrer territoire
     const terr = ref(false);
+    const les_terr = ref([]);
+    const sterr = useTerriN();
     const searchTerr = (s) => {
-      terr.value = true;
-      console.log(s.value + " " + s.label);
+      les_terr.value = [];
+      sterr
+        .getFromPRov({
+          id_province: s.value,
+        })
+        .then((res) => {
+          terr.value = true;
+          res.response.forEach((el) => {
+            les_terr.value.push({
+              label: el.nom_territoire,
+              value: el.id,
+            });
+          });
+        });
       //code
     };
     //fin montrer territoire
     //montrer groupement
+    const les_group = ref([]);
+    const sgroup = useGroupeN();
     const group = ref(false);
     const searchGroup = (s) => {
-      group.value = true;
-      console.log(s.value + " " + s.label);
-      //code
+      les_group.value = [];
+      sgroup
+        .getFromColl({
+          id_collectivite: s.value,
+        })
+        .then((res) => {
+          console.log(s);
+          res.response.forEach((el) => {
+            group.value = true;
+            les_group.value.push({
+              label: el.nom_groupement,
+              value: el.id,
+            });
+          });
+        });
     };
     //fin montrer groupement
 
     //montrer collectivite
     const col = ref(false);
+    const scol = useColleN();
+    const les_col = ref([]);
     const searchCol = (s) => {
-      col.value = true;
-      console.log(s.value + " " + s.label);
+      les_col.value = []
+      scol
+        .getFromTerr({
+          id_territoire: s.value,
+        })
+        .then((res) => {
+          res.response.forEach((el) => {
+            col.value = true;
+            les_col.value.push({
+              label: el.nom_collectivite,
+              value: el.id,
+            });
+          });
+        });
       //code
     };
     //fin montrer collectivite
@@ -943,6 +1006,9 @@ export default {
     return {
       group,
       les_prov,
+      les_terr,
+      les_col,
+      les_group,
       searchGroup,
       col,
       searchCol,

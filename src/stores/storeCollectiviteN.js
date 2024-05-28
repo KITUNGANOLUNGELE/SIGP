@@ -12,5 +12,11 @@ export const useColleN = defineStore("uColleN", {
       );
       return data;
     },
+    async getFromTerr(s){
+      let f = new FormData();
+      f.append("id_territoire", s.id_territoire);
+      let data = await axios.post("http://localhost/sigp/collectivite/get/terr?user=hibaigle&mdp=mdp",f)
+      return data.data
+  }
   },
 });
