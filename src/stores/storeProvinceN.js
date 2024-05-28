@@ -12,5 +12,11 @@ export const useProvN = defineStore("uProvN", {
       );
       return data.data.response;
     },
+    async getFromPays(s){
+      let f = new FormData();
+      f.append("id_pays", s.id_pays);
+      let data = await axios.post("http://localhost/sigp/province/get/pays?user=hibaigle&mdp=mdp", f);
+      return data.data
+    }
   },
 });

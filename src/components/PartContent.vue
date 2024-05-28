@@ -138,7 +138,8 @@
                             <q-icon name="language" color="primary" />
                           </template>
                         </q-select>
-                        <q-select v-if="pays.length > 0"
+                        <q-select
+                          v-if="pays.length > 0"
                           dense
                           v-model="province_p"
                           label="Province d'origine"
@@ -568,7 +569,8 @@
                           dense
                           :rules="[(val) => !!val || 'Champ requis']"
                         />
-                        <q-select v-if="prov"
+                        <q-select
+                          v-if="prov"
                           dense
                           v-model="province"
                           label="Province d'origine"
@@ -578,7 +580,7 @@
                           :rules="[(val) => !!val || 'Champ requis']"
                         />
                         <q-select
-                        v-if="terr"
+                          v-if="terr"
                           v-model="territoire"
                           label="Territoire"
                           dense
@@ -587,7 +589,7 @@
                           :rules="[(val) => !!val || 'Champ requis']"
                         />
                         <q-select
-                        v-if="group"
+                          v-if="group"
                           v-model="groupement"
                           label="Groupement"
                           dense
@@ -734,6 +736,7 @@ import "aos/dist/aos.css";
 import { useStore } from "src/stores/store";
 import { usePersonneN } from "src/stores/storePersonneN";
 import { usePaysN } from "src/stores/storePaysN";
+import { useProvN } from "src/stores/storeProvinceN";
 
 export default {
   // components: { TablePart,ArbreGen },
@@ -767,7 +770,7 @@ export default {
     const pays_p = ref(null);
     const ville_p = ref(null);
     const commune_p = ref(null);
-    const quartier_p = ref(null)
+    const quartier_p = ref(null);
     const avenue_p = ref(null);
     const num_maison_p = ref("");
     // infos de la mere
@@ -776,7 +779,7 @@ export default {
     const prenom_m = ref("");
     const l_naiss_m = ref("");
     const d_naiss_m = ref("");
-    const groupement_m = ref(null)
+    const groupement_m = ref(null);
     const pays_m = ref(null);
     const ville_m = ref(null);
     const commune_m = ref(null);
@@ -836,7 +839,7 @@ export default {
         if (results.value) {
           if (nom_p.value.length > 0 || nom_m.value.length > 0) {
             show_list.value = true;
-          }else{
+          } else {
             show_list.value = false;
           }
           show_complete.value = false;
@@ -876,56 +879,70 @@ export default {
     //fin rucuperer mere
 
     //recuperer les pays
-    const les_pays = ref ([])
+    const les_pays = ref([]);
     const storepays = usePaysN();
-    storepays.getpays().then(res=>{
+    storepays.getpays().then((res) => {
       console.log(res);
-      res.data.response.forEach(element => {
+      res.data.response.forEach((element) => {
         les_pays.value.push({
-          label : element.nom_pays,
-          value : element.id
-        })
+          label: element.nom_pays,
+          value: element.id,
+        });
       });
-    })
+    });
     //fin recuperer Pays
 
     //montrer les provinces
     const prov = ref(false);
-    const searchProv = (s) =>{
-      prov.value = true
-      console.log(s.value + " "+ s.label)
+    const les_prov = ref([]);
+    const sprov = useProvN();
+    const searchProv = (s) => {
+      sprov
+        .getFromPays({
+          id_pays: s.value,
+        })
+        .then((res) => {
+          prov.value = true;
+          res.response.forEach((el) => {
+            les_prov.value.push({
+              label : el.nom_province,
+              value : el.id
+            })
+          });
+        });
       //code
-    }
+    };
     //fin montrer Province
 
     //montrer territoire
     const terr = ref(false);
-    const searchTerr = (s) =>{
-      terr.value = true
-      console.log(s.value + " "+ s.label)
+    const searchTerr = (s) => {
+      terr.value = true;
+      console.log(s.value + " " + s.label);
       //code
-    }
+    };
     //fin montrer territoire
-     //montrer groupement
-     const group = ref(false);
-    const searchGroup = (s) =>{
-      group.value = true
-      console.log(s.value + " "+ s.label)
+    //montrer groupement
+    const group = ref(false);
+    const searchGroup = (s) => {
+      group.value = true;
+      console.log(s.value + " " + s.label);
       //code
-    }
+    };
     //fin montrer groupement
 
-     //montrer collectivite
-     const col = ref(false);
-    const searchCol = (s) =>{
-      col.value = true
-      console.log(s.value + " "+ s.label)
+    //montrer collectivite
+    const col = ref(false);
+    const searchCol = (s) => {
+      col.value = true;
+      console.log(s.value + " " + s.label);
       //code
-    }
+    };
     //fin montrer collectivite
 
     return {
       group,
+      les_prov,
       searchGroup,
       col,
       searchCol,
