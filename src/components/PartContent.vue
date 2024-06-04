@@ -40,7 +40,7 @@
               header-nav
               animated
             >
-              <q-step :name="1" :error="step < 3" :done="step > 1">
+              <q-step :name="1" :done="step > 1" :header-nav="step > 1">
                 <div class="text-weight-bold text-center text-uppercase">
                   Information Père
                 </div>
@@ -91,13 +91,11 @@
                             <q-icon name="man" color="primary" />
                           </template>
                         </q-input>
-                        <q-select
+                        <q-input
                           dense
                           v-model="l_naiss_p"
                           label="Lieu de naissance"
                           type="text"
-                          behavior="menu"
-                          options=""
                           @keydown="search"
                           @keyup="search"
                           :rules="[(val) => !!val || 'Champ requis']"
@@ -105,7 +103,7 @@
                           <template v-slot:prepend>
                             <q-icon name="pin_drop" color="primary" />
                           </template>
-                        </q-select>
+                        </q-input>
                         <q-input
                           dense
                           v-model="d_naiss_p"
@@ -119,65 +117,60 @@
                           </template>
                         </q-input>
                       </div>
-
                       <div class="sudb" v-if="show_complete">
                         <h5 style="margin-bottom: 10%; text-align: center">
-                          <q-icon name="home" color="primary" /> Origine
+                          <q-icon name="home" color="primary" />Origine
                         </h5>
-
                         <q-select
                           v-model="pays"
                           label="Pays de résidence"
                           type="text"
                           :options="les_pays"
                           behavior="menu"
+                          @update:model-value="searchProv(pays)"
                           dense
                           :rules="[(val) => !!val || 'Champ requis']"
-                        >
-                          <template v-slot:prepend>
-                            <q-icon name="language" color="primary" />
-                          </template>
-                        </q-select>
+                        />
                         <q-select
-                          v-if="pays.length > 0"
+                          v-if="prov"
                           dense
-                          v-model="province_p"
+                          v-model="province"
                           label="Province d'origine"
                           type="text"
+                          behavior="menu"
+                          :options="les_prov"
+                          @update:model-value="searchTerr(province)"
                           :rules="[(val) => !!val || 'Champ requis']"
                         />
                         <q-select
-                          v-model="territoire_p"
-                          :options="options_territoire"
+                          v-if="terr"
+                          v-model="territoire"
                           label="Territoire"
                           dense
+                          @update:model-value="searchCol(territoire)"
+                          behavior="menu"
+                          :options="les_terr"
                           :rules="[(val) => !!val || 'Champ requis']"
                         />
                         <q-select
-                          v-model="groupement_p"
-                          :options="options_groupement"
+                          v-if="col"
+                          v-model="collectivite"
+                          label="Collectivite"
+                          dense
+                          behavior="menu"
+                          :options="les_col"
+                          @update:model-value="searchGroup(collectivite)"
+                          :rules="[(val) => !!val || 'Champ requis']"
+                        />
+                        <q-select
+                          v-if="group"
+                          v-model="groupement"
                           label="Groupement"
+                          :options="les_group"
                           dense
+                          behavior="menu"
                           :rules="[(val) => !!val || 'Champ requis']"
                         />
-                        <q-select
-                          v-model="village_p"
-                          :options="options_village"
-                          label="Village"
-                          dense
-                          :rules="[(val) => !!val || 'Champ requis']"
-                        />
-                        <!-- <q-select
-                      v-model="groupement"
-                      use-input
-                      input-debounce="0"
-                      label="Nom du groupement"
-                      :options="options_groupement"
-                      @filter="filterFn"
-                      :rules="[(val) => !!val || 'Champ requis']"
-
-                      behavior="menu"
-                    /> -->
                       </div>
                       <div class="sudb" v-if="show_complete">
                         <h5 style="margin-bottom: 10%; text-align: center">
@@ -185,28 +178,56 @@
                         </h5>
                         <q-select
                           dense
-                          v-model="commune_p"
+                          v-model="province_res"
+                          label="Province de residence"
+                          type="text"
+                          :options="les_provs"
+                          @update:model-value="recupeVille(province_res)"
+                          behavior="menu"
+                          :rules="[(val) => !!val || 'Champ requis']"
+                        />
+                        <q-select
+                          dense
+                          v-model="ville_res"
+                          label="Ville de résidence"
+                          type="text"
+                          @update:model-value="recupCommune(ville_res)"
+                          :options="les_villes"
+                          behavior="menu"
+                          :rules="[(val) => !!val || 'Champ requis']"
+                        />
+                        <q-select
+                          dense
+                          v-model="commune"
                           label="Commune de résidence"
                           type="text"
+                          :options="les_communes"
+                          behavior="menu"
+                          @update:model-value="recupQuartier(commune)"
                           :rules="[(val) => !!val || 'Champ requis']"
                         />
                         <q-select
                           dense
-                          v-model="quartier_p"
+                          v-model="quartier"
                           label="Quartier de résidence"
                           type="text"
+                          :options="les_quartiers"
+                          behavior="menu"
+                          @update:model-value="recupAvenue(quartier)"
                           :rules="[(val) => !!val || 'Champ requis']"
                         />
                         <q-select
                           dense
-                          v-model="avenue_p"
+                          v-model="avenue"
                           label="Avenue"
                           type="text"
+                          :options="les_avenues"
+                          behavior="menu"
                           :rules="[(val) => !!val || 'Champ requis']"
                         />
                         <q-input
                           dense
-                          v-model="num_maison_p"
+                          v-model="num_maison"
                           label="Numero Maison"
                           type="number"
                           :rules="[(val) => !!val || 'Champ requis']"
@@ -265,11 +286,7 @@
                 </ul>
                 <q-stepper-navigation>
                   <q-btn
-                    @click="
-                      () => {
-                        step = 2;
-                      }
-                    "
+                    @click="stepIncrement"
                     color="black"
                     class="btn"
                     label="Continuer"
@@ -284,7 +301,12 @@
                 </q-stepper-navigation>
               </q-step>
 
-              <q-step :name="2" icon="create_new_folder" :done="step > 2">
+              <q-step
+                :name="2"
+                icon="create_new_folder"
+                :done="step > 2"
+                :header-nav="step > 2"
+              >
                 <div class="text-weight-bold text-center text-uppercase">
                   Information Mère
                 </div>
@@ -339,60 +361,60 @@
                           :rules="[(val) => !!val || 'Champ requis']"
                         />
                       </div>
-
                       <div class="sudb" v-if="show_complete">
                         <h5 style="margin-bottom: 10%; text-align: center">
                           <q-icon name="home" color="primary" />Origine
                         </h5>
                         <q-select
-                          v-model="pays_m"
+                          v-model="pays"
                           label="Pays de résidence"
                           type="text"
                           :options="les_pays"
                           behavior="menu"
+                          @update:model-value="searchProv(pays)"
                           dense
                           :rules="[(val) => !!val || 'Champ requis']"
                         />
                         <q-select
+                          v-if="prov"
                           dense
-                          v-model="province_m"
-                          :options="option_province"
+                          v-model="province"
                           label="Province d'origine"
                           type="text"
+                          behavior="menu"
+                          :options="les_prov"
+                          @update:model-value="searchTerr(province)"
                           :rules="[(val) => !!val || 'Champ requis']"
                         />
                         <q-select
-                          v-model="territoire_m"
-                          :options="options_territoire"
+                          v-if="terr"
+                          v-model="territoire"
                           label="Territoire"
                           dense
+                          @update:model-value="searchCol(territoire)"
+                          behavior="menu"
+                          :options="les_terr"
                           :rules="[(val) => !!val || 'Champ requis']"
                         />
                         <q-select
-                          v-model="groupement_m"
-                          :options="options_groupement"
+                          v-if="col"
+                          v-model="collectivite"
+                          label="Collectivite"
+                          dense
+                          behavior="menu"
+                          :options="les_col"
+                          @update:model-value="searchGroup(collectivite)"
+                          :rules="[(val) => !!val || 'Champ requis']"
+                        />
+                        <q-select
+                          v-if="group"
+                          v-model="groupement"
                           label="Groupement"
+                          :options="les_group"
                           dense
+                          behavior="menu"
                           :rules="[(val) => !!val || 'Champ requis']"
                         />
-                        <q-select
-                          v-model="village_m"
-                          :options="options_village"
-                          label="Village"
-                          dense
-                          :rules="[(val) => !!val || 'Champ requis']"
-                        />
-                        <!-- <q-select
-                      v-model="groupement"
-                      use-input
-                      input-debounce="0"
-                      label="Nom du groupement"
-                      :options="options_groupement"
-                      @filter="filterFn"
-                      :rules="[(val) => !!val || 'Champ requis']"
-
-                      behavior="menu"
-                    /> -->
                       </div>
                       <div class="sudb" v-if="show_complete">
                         <h5 style="margin-bottom: 10%; text-align: center">
@@ -400,28 +422,56 @@
                         </h5>
                         <q-select
                           dense
-                          v-model="commune_m"
+                          v-model="province_res"
+                          label="Province de residence"
+                          type="text"
+                          :options="les_provs"
+                          @update:model-value="recupeVille(province_res)"
+                          behavior="menu"
+                          :rules="[(val) => !!val || 'Champ requis']"
+                        />
+                        <q-select
+                          dense
+                          v-model="ville_res"
+                          label="Ville de résidence"
+                          type="text"
+                          @update:model-value="recupCommune(ville_res)"
+                          :options="les_villes"
+                          behavior="menu"
+                          :rules="[(val) => !!val || 'Champ requis']"
+                        />
+                        <q-select
+                          dense
+                          v-model="commune"
                           label="Commune de résidence"
                           type="text"
+                          :options="les_communes"
+                          behavior="menu"
+                          @update:model-value="recupQuartier(commune)"
                           :rules="[(val) => !!val || 'Champ requis']"
                         />
                         <q-select
                           dense
-                          v-model="quartier_m"
+                          v-model="quartier"
                           label="Quartier de résidence"
                           type="text"
+                          :options="les_quartiers"
+                          behavior="menu"
+                          @update:model-value="recupAvenue(quartier)"
                           :rules="[(val) => !!val || 'Champ requis']"
                         />
                         <q-select
                           dense
-                          v-model="avenue_m"
+                          v-model="avenue"
                           label="Avenue"
                           type="text"
+                          :options="les_avenues"
+                          behavior="menu"
                           :rules="[(val) => !!val || 'Champ requis']"
                         />
                         <q-input
                           dense
-                          v-model="num_maison_m"
+                          v-model="num_maison"
                           label="Numero Maison"
                           type="number"
                           :rules="[(val) => !!val || 'Champ requis']"
@@ -472,11 +522,7 @@
                 </ul>
                 <q-stepper-navigation>
                   <q-btn
-                    @click="
-                      () => {
-                        step = 3;
-                      }
-                    "
+                    @click="stepIncrement"
                     color="black"
                     class="btn"
                     label="Continuer"
@@ -491,7 +537,12 @@
                 </q-stepper-navigation>
               </q-step>
 
-              <q-step :name="3" icon="add_comment">
+              <q-step
+                :name="3"
+                icon="add_comment"
+                :done="step > 3"
+                :header-nav="step > 3"
+              >
                 <div class="text-weight-bold text-center text-uppercase">
                   Nouvelle naissance
                 </div>
@@ -555,7 +606,7 @@
                           :rules="[(val) => !!val || 'Champ requis']"
                         />
                       </div>
-                      <div class="sudb">
+                      <!-- <div class="sudb">
                         <h5 style="margin-bottom: 10%; text-align: center">
                           <q-icon name="home" color="primary" />Origine
                         </h5>
@@ -609,28 +660,39 @@
                           behavior="menu"
                           :rules="[(val) => !!val || 'Champ requis']"
                         />
-
-                        <!-- <q-select
-                      v-model="groupement"
-                      use-input
-                      input-debounce="0"
-                      label="Nom du groupement"
-                      :options="options_groupement"
-                      @filter="filterFn"
-                      :rules="[(val) => !!val || 'Champ requis']"
-
-                      behavior="menu"
-                    /> -->
-                      </div>
+                      </div> -->
                       <div class="sudb">
                         <h5 style="margin-bottom: 10%; text-align: center">
                           <q-icon name="location_on" color="primary" />Résidence
                         </h5>
                         <q-select
                           dense
+                          v-model="province_res"
+                          label="Province de residence"
+                          type="text"
+                          :options="les_provs"
+                          @update:model-value="recupeVille(province_res)"
+                          behavior="menu"
+                          :rules="[(val) => !!val || 'Champ requis']"
+                        />
+                        <q-select
+                          dense
+                          v-model="ville_res"
+                          label="Ville de résidence"
+                          type="text"
+                          @update:model-value="recupCommune(ville_res)"
+                          :options="les_villes"
+                          behavior="menu"
+                          :rules="[(val) => !!val || 'Champ requis']"
+                        />
+                        <q-select
+                          dense
                           v-model="commune"
                           label="Commune de résidence"
                           type="text"
+                          :options="les_communes"
+                          behavior="menu"
+                          @update:model-value="recupQuartier(commune)"
                           :rules="[(val) => !!val || 'Champ requis']"
                         />
                         <q-select
@@ -638,6 +700,9 @@
                           v-model="quartier"
                           label="Quartier de résidence"
                           type="text"
+                          :options="les_quartiers"
+                          behavior="menu"
+                          @update:model-value="recupAvenue(quartier)"
                           :rules="[(val) => !!val || 'Champ requis']"
                         />
                         <q-select
@@ -645,6 +710,8 @@
                           v-model="avenue"
                           label="Avenue"
                           type="text"
+                          :options="les_avenues"
+                          behavior="menu"
                           :rules="[(val) => !!val || 'Champ requis']"
                         />
                         <q-input
@@ -674,6 +741,15 @@
                     color="primary"
                     @click="$refs.stepper.previous()"
                     label="Back"
+                    class="q-ml-sm"
+                  />
+                  <q-btn
+                    square
+                    v-if="step == 3"
+                    flat
+                    color="positive"
+                    @click="new_add"
+                    label="Nouveau"
                     class="q-ml-sm"
                   />
                 </q-stepper-navigation>
@@ -747,6 +823,11 @@ import { useProvN } from "src/stores/storeProvinceN";
 import { useTerriN } from "src/stores/storeTerritoireN";
 import { useColleN } from "src/stores/storeCollectiviteN";
 import { useGroupeN } from "src/stores/storeGroupementN";
+import { useVilleN } from "src/stores/storeVilleN";
+import { useCommuneN } from "src/stores/storeCommuneN";
+import { useQuartierN } from "src/stores/storeQuartierN";
+import { useAvenueN } from "src/stores/storeAvenueN";
+import { useNaissanceN } from "src/stores/storeNaissanceN";
 
 export default {
   // components: { TablePart,ArbreGen },
@@ -762,10 +843,128 @@ export default {
         $q.loading.hide();
       }
     });
-
+    const new_add = () => {
+      step.value = 1;
+      p.pere_tmp = null;
+      p.mere_tmp = null;
+      p.pere = null;
+      p.mere = null;
+      nom_m.value = "";
+      postnom_m.value = "";
+      prenom_m.value = "";
+      d_naiss_m.value = "";
+      l_naiss_m.value = "";
+      show_complete.value = false;
+      show_list.value = false;
+    };
+    const stepIncrement = () => {
+      //console.log(show_complete.value);
+      if (
+        step.value == 1 &&
+        nom_p.value != "" &&
+        nom_p.value != "" &&
+        prenom_p.value != "" &&
+        d_naiss_p.value != "" &&
+        l_naiss_p.value != ""
+      ) {
+        if (show_complete.value == true) {
+          if (groupement.value != null && avenue.value != null) {
+            p.setPere({
+              nom: nom_p.value,
+              postnom: postnom_p.value,
+              prenom: prenom_p.value,
+              lieu_naissance: l_naiss_p.value,
+              date_naissance: d_naiss_p.value,
+              sexe: "M",
+              id_partenaire: localStorage.getItem("id_partenaire"),
+              id_groupement: groupement.value.value,
+              id_avenue: avenue.value.value,
+              num_maison: num_maison.value,
+            });
+            step.value++;
+            province.value = null;
+            territoire.value = null;
+            groupement.value = null;
+            collectivite.value = null;
+            province_res.value = null;
+            ville_res.value = null;
+            commune.value = null;
+            quartier.value = null;
+            avenue.value = null;
+            num_maison.value = "";
+            show_complete.value = false;
+          } else {
+            $q.notify({
+              message: "Completer les informations",
+              color: "negative",
+              icon: "error",
+              iconColor: "white",
+              textColor: "white",
+            });
+          }
+        } else {
+          step.value++;
+        }
+      } //info mere
+      else if (
+        step.value == 2 &&
+        nom_m.value != "" &&
+        nom_m.value != "" &&
+        prenom_m.value != "" &&
+        d_naiss_m.value != "" &&
+        l_naiss_m.value != ""
+      ) {
+        if (show_complete.value == true) {
+          if (groupement.value != null && avenue.value != null) {
+            p.setMere({
+              nom: nom_m.value,
+              postnom: postnom_m.value,
+              prenom: prenom_m.value,
+              lieu_naissance: l_naiss_m.value,
+              date_naissance: d_naiss_m.value,
+              sexe: "F",
+              id_partenaire: localStorage.getItem("id_partenaire"),
+              id_groupement: groupement.value.value,
+              id_avenue: avenue.value.value,
+              num_maison: num_maison.value,
+            });
+            province.value = null;
+            territoire.value = null;
+            groupement.value = null;
+            collectivite.value = null;
+            province_res.value = null;
+            ville_res.value = null;
+            commune.value = null;
+            quartier.value = null;
+            avenue.value = null;
+            num_maison.value = "";
+            step.value++;
+          } else {
+            $q.notify({
+              message: "Completer les informations",
+              color: "negative",
+              icon: "error",
+              iconColor: "white",
+              textColor: "white",
+            });
+          }
+        } else {
+          step.value++;
+        }
+      } else {
+        $q.notify({
+          message: "Completer les informations",
+          color: "negative",
+          icon: "error",
+          iconColor: "white",
+          textColor: "white",
+        });
+      }
+    };
     const store = useStore();
     // Les variables
     const dialog = ref(false);
+    const step = ref(1);
     const show_list = ref(false);
     const show_complete = ref(false);
     const position = ref("top");
@@ -806,11 +1005,16 @@ export default {
     const couleur_oeil = ref("");
     const groupement = ref(null);
     const pays = ref(null);
+    const province = ref(null);
+    const territoire = ref(null);
     const ville = ref(null);
     const commune = ref(null);
     const quartier = ref(null);
     const avenue = ref(null);
     const num_maison = ref("");
+    const collectivite = ref(null);
+    const province_res = ref(null);
+    const ville_res = ref(null);
 
     let persistent = false;
 
@@ -818,8 +1022,225 @@ export default {
     const groupe_Types = [];
     let groupement_Type = ref([]);
 
-    // Enregistrement d'une nouvelle personne
-    const submitForm = () => {};
+    // Enregistrement d'une nouvelle naissance
+    const submitForm = () => {
+      //en connaissant le pere et la mere
+      if (p.pere_tmp.id && p.mere_tmp.id) {
+        //enregistrement de la personne
+        p.save_PC({
+          nom: nom.value,
+          postnom: postnom.value,
+          prenom: prenom.value,
+          lieu_naissance: l_naiss.value,
+          date_naissance: d_naiss.value,
+          sexe: sexe.value,
+          id_partenaire: localStorage.getItem("id_partenaire"),
+          couleur_oeil: couleur_oeil.value,
+          id_groupement: p.pere_tmp.id_groupement,
+          id_avenue: avenue.value.value,
+          num_maison: num_maison.value,
+        }).then((res) => {
+          //enregistrement de la naissance
+          let id = res.response.dernier_ajout.dernier[0].id;
+          //console.log(id);
+          const un = useNaissanceN();
+          un.saveNaissance({
+            id_enfant: id,
+            id_pere: p.pere_tmp.id,
+            id_mere: p.mere_tmp.id,
+            couleur_oeil: couleur_oeil.value,
+          }).then((res) => {
+            if (res.response.message) {
+              nom.value = "";
+              postnom.value = "";
+              prenom.value = "";
+              l_naiss.value = "";
+              province_res.value = null;
+              ville_res.value = null;
+              commune.value = null;
+              quartier.value = null;
+              avenue.value = null;
+              num_maison.value = "";
+              //console.log(res);
+              $q.notify({
+                message: res.response.message,
+                icon: "check",
+                color: "positive",
+                iconColor: "white",
+                textColor: "white",
+              });
+            }
+          });
+        });
+      } else if (!p.pere_tmp.id && p.mere_tmp.id) {
+        //enregistrement de pere
+        p.save_PC(p.pere_tmp).then((res) => {
+          //reccuperation de l'id du pere
+          let id_p = res.response.dernier_ajout.dernier[0].id;
+          p.setPere(res.response.dernier_ajout.dernier[0]);
+          //enregistrement enfant
+          p.save_PC({
+            nom: nom.value,
+            postnom: postnom.value,
+            prenom: prenom.value,
+            lieu_naissance: l_naiss.value,
+            date_naissance: d_naiss.value,
+            sexe: sexe.value,
+            id_partenaire: localStorage.getItem("id_partenaire"),
+            couleur_oeil: couleur_oeil.value,
+            id_groupement: p.pere_tmp.id_groupement,
+            id_avenue: avenue.value.value,
+            num_maison: num_maison.value,
+          }).then((res) => {
+            //enregistrement de la naissance
+            let id = res.response.dernier_ajout.dernier[0].id;
+            //console.log(id);
+            const un = useNaissanceN();
+            un.saveNaissance({
+              id_enfant: id,
+              id_pere: id_p,
+              id_mere: p.mere_tmp.id,
+              couleur_oeil: couleur_oeil.value,
+            }).then((res) => {
+              if (res.response.message) {
+                nom.value = "";
+                postnom.value = "";
+                prenom.value = "";
+                l_naiss.value = "";
+                province_res.value = null;
+                ville_res.value = null;
+                commune.value = null;
+                quartier.value = null;
+                avenue.value = null;
+                num_maison.value = "";
+                //console.log(res);
+                $q.notify({
+                  message: res.response.message,
+                  icon: "check",
+                  color: "positive",
+                  iconColor: "white",
+                  textColor: "white",
+                });
+              }
+            });
+          });
+        });
+      } else if (p.pere_tmp.id && !p.mere_tmp.id) {
+        //enregistrement de pere
+        p.save_PC(p.mere_tmp).then((res) => {
+          //reccuperation de l'id du pere
+          let id_m = res.response.dernier_ajout.dernier[0].id;
+          p.setPere(res.response.dernier_ajout.dernier[0]);
+          //enregistrement enfant
+          p.save_PC({
+            nom: nom.value,
+            postnom: postnom.value,
+            prenom: prenom.value,
+            lieu_naissance: l_naiss.value,
+            date_naissance: d_naiss.value,
+            sexe: sexe.value,
+            id_partenaire: localStorage.getItem("id_partenaire"),
+            couleur_oeil: couleur_oeil.value,
+            id_groupement: p.pere_tmp.id_groupement,
+            id_avenue: avenue.value.value,
+            num_maison: num_maison.value,
+          }).then((res) => {
+            //enregistrement de la naissance
+            let id = res.response.dernier_ajout.dernier[0].id;
+            //console.log(id);
+            const un = useNaissanceN();
+            un.saveNaissance({
+              id_enfant: id,
+              id_pere: p.pere_tmp.id,
+              id_mere: id_m,
+              couleur_oeil: couleur_oeil.value,
+            }).then((res) => {
+              if (res.response.message) {
+                nom.value = "";
+                postnom.value = "";
+                prenom.value = "";
+                l_naiss.value = "";
+                province_res.value = null;
+                ville_res.value = null;
+                commune.value = null;
+                quartier.value = null;
+                avenue.value = null;
+                num_maison.value = "";
+                //console.log(res);
+                $q.notify({
+                  message: res.response.message,
+                  icon: "check",
+                  color: "positive",
+                  iconColor: "white",
+                  textColor: "white",
+                });
+              }
+            });
+          });
+        });
+      } else if (!p.pere_tmp.id && !p.mere_tmp.id) {
+        //enregistrement du pere
+        p.save_PC(p.pere_tmp).then((res) => {
+          //recuperation du resultat de l'id du pere
+          let id_p = res.response.dernier_ajout.dernier[0].id;
+          p.setPere(res.response.dernier_ajout.dernier[0]);
+          //enregistrement de la mere
+          p.save_PC(p.mere_tmp).then((res) => {
+            let id_m = res.response.dernier_ajout.dernier[0].id;
+            p.setMere(res.response.dernier_ajout.dernier[0]);
+            //enregistrement de l'enfant
+            //enregistrement enfant
+            p.save_PC({
+              nom: nom.value,
+              postnom: postnom.value,
+              prenom: prenom.value,
+              lieu_naissance: l_naiss.value,
+              date_naissance: d_naiss.value,
+              sexe: sexe.value,
+              id_partenaire: localStorage.getItem("id_partenaire"),
+              couleur_oeil: couleur_oeil.value,
+              id_groupement: p.pere_tmp.id_groupement,
+              id_avenue: avenue.value.value,
+              num_maison: num_maison.value,
+            }).then((res) => {
+              //enregistrement de la naissance
+              let id = res.response.dernier_ajout.dernier[0].id;
+              //console.log(id);
+              const un = useNaissanceN();
+              un.saveNaissance({
+                id_enfant: id,
+                id_pere: id_p,
+                id_mere: id_m,
+                couleur_oeil: couleur_oeil.value,
+              }).then((res) => {
+                if (res.response.message) {
+                  nom.value = "";
+                  postnom.value = "";
+                  prenom.value = "";
+                  l_naiss.value = "";
+                  province_res.value = null;
+                  ville_res.value = null;
+                  commune.value = null;
+                  quartier.value = null;
+                  avenue.value = null;
+                  num_maison.value = "";
+                  console.log(res);
+                  $q.notify({
+                    message: res.response.message,
+                    icon: "check",
+                    color: "positive",
+                    iconColor: "white",
+                    textColor: "white",
+                  });
+                }
+              });
+            });
+          });
+        });
+      }
+    };
+    //fin enregistrement d'une nouvelle naissance
+
     //recherche de la personne existante
     const search = () => {
       if (p.pere) {
@@ -843,7 +1264,7 @@ export default {
         postnom: postnom_p.value != "" ? postnom_p.value : postnom_m.value,
         prenom: prenom_p.value != "" ? prenom_p.value : prenom_m.value,
       }).then((res) => {
-        //console.log(nom_m.value);
+        //console.log(res);
         results.value = null;
         results.value = res.data.response;
         if (results.value) {
@@ -871,7 +1292,6 @@ export default {
       d_naiss_p.value = s.date_naissance;
       show_list.value = false;
       p.setPere(s);
-      console.log(p.pere);
     };
     //fin recuperer pere
 
@@ -884,7 +1304,6 @@ export default {
       d_naiss_m.value = s.date_naissance;
       show_list.value = false;
       p.setMere(s);
-      console.log(p.mere);
     };
     //fin rucuperer mere
 
@@ -892,10 +1311,6 @@ export default {
     const les_pays = ref([]);
     const storepays = usePaysN();
     storepays.getpays().then((res) => {
-      les_prov.value = [];
-      les_terr.value = [];
-      les_col.value = [];
-      les_group.value = [];
       res.data.response.forEach((element) => {
         les_pays.value.push({
           label: element.nom_pays,
@@ -910,29 +1325,34 @@ export default {
     const les_prov = ref([]);
     const sprov = useProvN();
     const searchProv = (s) => {
+      province.value = null;
+      territoire.value = null;
+      collectivite.value = null;
+      groupement.value = null;
       les_prov.value = [];
-      if (s.label == 'RDC') {
+      if (s.label == "RDC") {
         sprov
-        .getFromPays({
-          id_pays: s.value,
-        })
-        .then((res) => {
-          prov.value = true;
-          res.response.forEach((el) => {
-            les_prov.value.push({
-              label: el.nom_province,
-              value: el.id,
+          .getFromPays({
+            id_pays: s.value,
+          })
+          .then((res) => {
+            prov.value = true;
+            res.response.forEach((el) => {
+              les_prov.value.push({
+                label: el.nom_province,
+                value: el.id,
+              });
             });
           });
-        });
-      } else{
+      } else {
         prov.value = false;
         terr.value = false;
-        col.value= false;
-        group.value=false;
+        col.value = false;
+        group.value = false;
       }
       //code
     };
+
     //fin montrer Province
 
     //montrer territoire
@@ -968,7 +1388,7 @@ export default {
           id_collectivite: s.value,
         })
         .then((res) => {
-          console.log(s);
+          //console.log(s);
           res.response.forEach((el) => {
             group.value = true;
             les_group.value.push({
@@ -985,7 +1405,7 @@ export default {
     const scol = useColleN();
     const les_col = ref([]);
     const searchCol = (s) => {
-      les_col.value = []
+      les_col.value = [];
       scol
         .getFromTerr({
           id_territoire: s.value,
@@ -1003,8 +1423,110 @@ export default {
     };
     //fin montrer collectivite
 
+    //get toutes les provinces
+    const storeProv = useProvN();
+    const les_provs = ref([]);
+    storeProv.getprovince().then((res) => {
+      res.forEach((el) => {
+        les_provs.value.push({
+          label: el.nom_province,
+          value: el.id,
+        });
+      });
+    });
+    //fin recuperation province
+    //recuperer ville
+    const sville = useVilleN();
+    const les_villes = ref([]);
+    const recupeVille = (province) => {
+      ville_res.value = null;
+      commune.value = null;
+      quartier.value = null;
+      avenue.value = null;
+      num_maison.value = "";
+      les_villes.value = [];
+      sville
+        .getFromProvince({
+          id_province: province.value,
+        })
+        .then((res) => {
+          res.response.forEach((el) => {
+            les_villes.value.push({
+              label: el.nom_ville,
+              value: el.id,
+            });
+          });
+        });
+    };
+
+    //obtenir commune depuis une Ville
+    const les_communes = ref([]);
+    const scommune = useCommuneN();
+    const recupCommune = (ville) => {
+      les_communes.value = [];
+      scommune
+        .getFromVille({
+          id_ville: ville.value,
+        })
+        .then((res) => {
+          res.response.forEach((el) => {
+            les_communes.value.push({
+              label: el.nom_commune,
+              value: el.id,
+            });
+          });
+        });
+    };
+    //get quartier from commune
+    const les_quartiers = ref([]);
+    const squartier = useQuartierN();
+    const recupQuartier = (commune) => {
+      les_quartiers.value = [];
+      squartier
+        .getFromCommune({
+          id_commune: commune.value,
+        })
+        .then((res) => {
+          res.response.forEach((el) => {
+            les_quartiers.value.push({
+              label: el.nom_quartier,
+              value: el.id,
+            });
+          });
+        });
+    };
+    //get avenue from quartier
+    const les_avenues = ref([]);
+    const savenue = useAvenueN();
+    const recupAvenue = (quartier) => {
+      les_avenues.value = [];
+      savenue
+        .getFromQuartier({
+          id_quartier: quartier.value,
+        })
+        .then((res) => {
+          res.response.forEach((el) => {
+            les_avenues.value.push({
+              label: el.nom_avenue,
+              value: el.id,
+            });
+          });
+        });
+    };
     return {
+      new_add,
+      recupAvenue,
+      les_avenues,
+      recupQuartier,
+      les_quartiers,
+      recupCommune,
+      les_communes,
+      recupeVille,
+      les_villes,
+      les_provs,
       group,
+      province_res,
+      ville_res,
       les_prov,
       les_terr,
       les_col,
@@ -1026,7 +1548,8 @@ export default {
       timer,
       $q,
       router,
-      step: ref(1),
+      step,
+      stepIncrement,
       // infos pere
       nom_p,
       postnom_p,
@@ -1070,6 +1593,9 @@ export default {
       num_maison,
       submitForm,
       persistent,
+      province,
+      territoire,
+      collectivite,
 
       options_genre: ["Masculin", "Féminin"],
       options_eye: ["Bleu", "Marron", "Rouge"],

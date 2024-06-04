@@ -16,7 +16,7 @@ export const useGroupeN = defineStore("uGroupeN", {
       let f = new FormData();
       f.append("id_collectivite", s.id_collectivite);
       let data = await axios.post("http://localhost/sigp/groupement/get/col?user=hibaigle&mdp=mdp",f)
-      console.log(data);
+      //console.log(data);
       return data.data
   }
   },

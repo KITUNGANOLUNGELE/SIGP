@@ -12,12 +12,24 @@ export const useVilleN = defineStore("uVilleN", {
       );
       return data;
     },
+    async saveville(v) {
+      let d = new FormData();
+      d.append("nom_ville", v.nom_ville);
+      d.append("id_province", v.id_province);
+      let data = await axios.post(
+        "http://localhost/sigp/ville/save?user=hibaigle&mdp=mdp",
+        d
+      );
+      return data;
+    },
+    async getFromProvince(v) {
+      let f = new FormData();
+      f.append("id_province", v.id_province);
+      let data = await axios.post(
+        "http://localhost/sigp/ville/get/prov?user=hibaigle&mdp=mdp",
+        f
+      );
+      return data.data;
+    },
   },
-  async saveville(v){
-    let d = new FormData();
-    d.append("nom_ville",v.nom_ville)
-    let data = await axios.post("http://localhost/sigp/ville/save?user=hibaigle&mdp=mdp",d);
-    return data;
-  }
-
 });

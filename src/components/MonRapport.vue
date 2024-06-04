@@ -1,7 +1,7 @@
 <template>
   <q-layout view="hHh lpR fFf">
     <div class="q-mx-md">
-      <h1>Acte de Naissance</h1>
+      <h1>Attestation de Naissance</h1>
     </div>
 
     <div
@@ -57,6 +57,8 @@
                   v-model="nom"
                   label="Nom"
                   type="text"
+                  @keydown="searchP"
+                  @keyup="searchP"
                   :rules="[(val) => !!val || 'Champ nom requis']"
                 />
                 <q-input
@@ -64,6 +66,8 @@
                   v-model="postnom"
                   label="Postnom"
                   type="text"
+                  @keydown="searchP"
+                  @keyup="searchP"
                   :rules="[(val) => !!val || 'Champ  postnom requis']"
                 />
                 <q-input
@@ -71,11 +75,13 @@
                   v-model="prenom"
                   label="Prenom"
                   type="text"
+                  @keydown="searchP"
+                  @keyup="searchP"
                   :rules="[(val) => !!val || 'Champ prenom requis']"
                 />
                 <q-input
                   dense
-                  v-model="num_maison"
+                  v-model="lieu_naissance"
                   label="LieuNaissance"
                   type="text"
                   :rules="[(val) => !!val || 'Champ lieu requis']"
@@ -85,6 +91,7 @@
                   v-model="date_naissance"
                   label="Date de Naissance"
                   type="date"
+                  @change="searchP"
                   :rules="[(val) => !!val || 'Champ date requis']"
                 />
                 <q-input
@@ -94,7 +101,7 @@
                   type="text"
                   :rules="[(val) => !!val || 'Champ groupement requis']"
                 />
-                <q-btn
+                <!-- <q-btn
                   square
                   color="dark"
                   type="submit"
@@ -102,8 +109,45 @@
                   label="Rechercher par groupe"
                   no-caps
                   class="full-width"
-                ></q-btn>
+                ></q-btn> -->
               </q-form>
+              <div v-if="show_list">
+                <q-list bordered>
+                  <q-item
+                    clickable
+                    v-ripple
+                    v-for="item in results"
+                    :key="item.id"
+                    class="bg-blue-4"
+                    @click="recupPers(item)"
+                  >
+                    <q-item-section
+                      class="text-center text-white text-weight-bold"
+                    >
+                      <div class="row">
+                        <div class="col">
+                          <span class="q-mr-sm"
+                            ><q-icon name="face" color="white" /></span
+                          >{{ item.nom }} {{ item.postnom }}
+                          {{ item.prenom }}
+                        </div>
+                        <q-separator vertical color="white" />
+                        <div class="col">
+                          <span class="q-mr-sm"
+                            ><q-icon name="event" color="white" /></span
+                          >Né le {{ item.date_naissance }}
+                        </div>
+                        <q-separator vertical color="white" />
+                        <div class="col">
+                          <span class="q-mr-sm"
+                            ><q-icon name="location_on" color="white" /></span
+                          >Né à {{ item.lieu_naissance }}
+                        </div>
+                      </div>
+                    </q-item-section>
+                  </q-item>
+                </q-list>
+              </div>
             </div>
           </q-card-section>
         </q-card>
@@ -111,10 +155,10 @@
       <!-- End Dialogue -->
     </div>
 
-    <ul v-if="showResults" class="box-info q-pa-md" data-aos="zoom-in">
+    <ul v-if="showResults" class="q-pa-md" data-aos="zoom-in">
       <li>
         <div ref="printableContent">
-          <ActeNaissance />
+          <AttestationNaissance />
         </div>
 
         <div class="bg-grey-4 q-mt-md q-flex flex-center q-justify-end">
@@ -149,18 +193,29 @@
 import { ref } from "vue";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import ActeNaissance from "src/components/Documents/ActeNaissance.vue";
+import AttestationNaissance from "src/components/Documents/AttestationNaissance.vue";
+import ActeNaissance from "./Documents/ActeNaissance.vue";
+import { usePersonneN } from "src/stores/storePersonneN";
 
 export default {
-  components: { ActeNaissance },
+  components: { AttestationNaissance },
   data() {
     const list = ["blur(4px)"];
     const dialog = ref(false);
     const backdropFilter = ref(null);
     return {
       searchQuery: "",
+      nom: ref(""),
+      postnom: ref(""),
+      prenom: ref(""),
+      lieu_naissance: ref(""),
+      date_naissance: ref(""),
+      num_maison: ref(""),
       showResults: false,
+      show_list: ref(false),
       dialog,
+      results: ref(null),
+      personne: usePersonneN(),
       backdropFilter,
       backdropFilterList: list.map((filter) => ({
         label: filter,
@@ -172,8 +227,56 @@ export default {
     };
   },
   methods: {
+    searchP() {
+      if (this.personne.pere) {
+        this.personne.pere = null;
+        this.personne.pere_tmp = null;
+      }
+      if (this.personne.mere) {
+        this.personne.mere = null;
+        this.personne.mere_tmp = null;
+      }
+      this.personne
+        .getpers({
+          nom: this.nom,
+          postnom: this.postnom,
+          prenom: this.prenom,
+        })
+        .then((res) => {
+          //console.log(res);
+          this.results = null;
+          this.results = res.data.response;
+          if (this.results) {
+            if (this.nom.length > 0) {
+              this.show_list = true;
+            } else {
+              this.show_list = false;
+            }
+          } else {
+            this.show_list = false;
+          }
+          // console.log(res);
+        });
+    },
+    recupPers(s) {
+      this.nom = s.nom;
+      this.postnom = s.postnom;
+      this.prenom = s.prenom;
+      this.lieu_naissance = s.lieu_naissance;
+      this.num_maison = s.num_maison;
+      this.date_naissance = s.date_naissance;
+      this.show_list = false;
+      this.personne.buldActeNaiss(s.id).then((res) => {
+        this.showResults = true;
+        this.dialog = false;
+        this.personne.personne = res;
+      });
+    },
     search() {
-      this.showResults = true;
+      this.personne.buldActeNaiss(this.searchQuery).then((res) => {
+        this.showResults = true;
+        this.personne.personne = res;
+      });
     },
     printContent() {
       const printableElement = this.$refs.printableContent.cloneNode(true);

@@ -12,5 +12,11 @@ export const useAvenueN = defineStore("uAvenueN", {
       );
       return data;
     },
+    async getFromQuartier(s){
+      let f = new FormData();
+      f.append("id_quartier", s.id_quartier);
+      let data = await axios.post("http://localhost/sigp/avenue/get/quartier?user=hibaigle&mdp=mdp", f)
+      return data.data
+    }
   },
 });

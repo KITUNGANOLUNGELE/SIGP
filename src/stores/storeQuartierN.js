@@ -12,5 +12,11 @@ export const useQuartierN = defineStore("uQuartierN", {
       );
       return data;
     },
+    async getFromCommune(s){
+      let f = new FormData();
+      f.append("id_commune", s.id_commune);
+      let data = await axios.post("http://localhost/sigp/quartier/get/commune?user=hibaigle&mdp=mdp", f)
+      return data.data
+    }
   },
 });
