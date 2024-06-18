@@ -25,7 +25,7 @@
       Je soussigné <span class="text-bold">MUSOMBA LUBUBU Guy</span> officier de
       l'état civil et Bourgmestre de la Commune de Goma, atteste par la présente
       qu'en date du {{ formatDate(personne.personne.donnee.date_naissance) }} est né à <span class="text-bold">{{ personne.personne.donnee.nom_ville.toUpperCase() }}</span> un
-      enfant de sexe <span class="text-bold">{{ personne.personne.donnee.sexe == "F" || "f" ? "FEMININ" : "MASCULIN" }}</span> auquel a été donné
+      enfant de sexe <span class="text-bold">{{ personne.personne.donnee.sexe == "F" || personne.personne.donnee.sexe =="f" || personne.personne.donnee.sexe =="Féminin" ? "FEMININ" : "MASCULIN" }}</span> auquel a été donné
       le nom de <span class="text-bold">{{ personne.personne.donnee.nom.toUpperCase() }} {{ personne.personne.donnee.postnom.toUpperCase() }} {{ personne.personne.donnee.prenom.toUpperCase() }}</span> enfant
       issu d'un mariage monogamique, coutumier, civil, religieux conclu entre
       Monsieur <span class="text-bold"> {{ personne.personne.pere.nom.toUpperCase() }} {{ personne.personne.pere.postnom.toUpperCase() }} {{ personne.personne.pere.prenom.toUpperCase() }}</span> ayant
