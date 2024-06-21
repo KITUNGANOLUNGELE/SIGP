@@ -8,14 +8,14 @@ export const useGroupeN = defineStore("uGroupeN", {
   actions: {
     async getgroupement() {
       let data = await axios.get(
-        "http://localhost/sigp/groupement/get/all?user=hibaigle&mdp=mdp"
+        "https://hibaigle.000webhostapp.com/sigp/groupement/get/all?user=hibaigle&mdp=mdp"
       );
       return data;
     },
     async getFromColl(s){
       let f = new FormData();
       f.append("id_collectivite", s.id_collectivite);
-      let data = await axios.post("http://localhost/sigp/groupement/get/col?user=hibaigle&mdp=mdp",f)
+      let data = await axios.post("https://hibaigle.000webhostapp.com/sigp/groupement/get/col?user=hibaigle&mdp=mdp",f)
       //console.log(data);
       return data.data
   }

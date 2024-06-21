@@ -60,7 +60,7 @@ export const useStore = defineStore("store", {
         datas.append("role", role);
         datas.append("login", login);
         datas.append("psw", psw);
-        const url = "http://localhost/sigp/user/authen?user=hibaigle&mdp=mdp";
+        const url = "https://hibaigle.000webhostapp.com/sigp/user/authen?user=hibaigle&mdp=mdp";
         const headers = {
           "Content-Type": "multipart/form-data",
         };
@@ -156,7 +156,7 @@ export const useStore = defineStore("store", {
     async afficherUsers() {
       try {
         const url =
-          "http://localhost/sigp/utilisateur_personne/get/all?user=hibaigle&mdp=mdp";
+          "https://hibaigle.000webhostapp.com/sigp/utilisateur_personne/get/all?user=hibaigle&mdp=mdp";
         const headers = {
           "Content-Type": "application/json",
         };
@@ -180,7 +180,7 @@ export const useStore = defineStore("store", {
     async afficherPersonnes() {
       try {
         const url =
-          "http://localhost/sigp/personne/get/all?user=hibaigle&mdp=mdp";
+          "https://hibaigle.000webhostapp.com/sigp/personne/get/all?user=hibaigle&mdp=mdp";
         const headers = {
           "Content-Type": "application/json",
         };
@@ -205,7 +205,7 @@ export const useStore = defineStore("store", {
     async afficherNaissance() {
       try {
         const url =
-          "http://localhost/sigp/naissance/get/all?user=hibaigle&mdp=mdp";
+          "https://hibaigle.000webhostapp.com/sigp/naissance/get/all?user=hibaigle&mdp=mdp";
         const headers = {
           "Content-Type": "application/json",
         };
@@ -229,7 +229,7 @@ export const useStore = defineStore("store", {
     async afficherGroupement() {
       try {
         const url =
-          "http://localhost/sigp/groupement/get/all?user=hibaigle&mdp=mdp";
+          "https://hibaigle.000webhostapp.com/sigp/groupement/get/all?user=hibaigle&mdp=mdp";
         const headers = {
           "Content-Type": "application/json",
         };
@@ -253,7 +253,7 @@ export const useStore = defineStore("store", {
     async afficherAvenues() {
       try {
         const url =
-          "http://localhost/sigp/avenue/get/all?user=hibaigle&mdp=mdp";
+          "https://hibaigle.000webhostapp.com/sigp/avenue/get/all?user=hibaigle&mdp=mdp";
         const headers = {
           "Content-Type": "application/json",
         };
@@ -277,7 +277,7 @@ export const useStore = defineStore("store", {
     async afficherCatPartenaires() {
       try {
         const url =
-          "http://localhost/sigp/categorie_partenaire/get/all?user=hibaigle&mdp=mdp";
+          "https://hibaigle.000webhostapp.com/sigp/categorie_partenaire/get/all?user=hibaigle&mdp=mdp";
         const headers = {
           "Content-Type": "application/json",
         };
@@ -301,7 +301,7 @@ export const useStore = defineStore("store", {
     async afficherPartenaires() {
       try {
         const url =
-          "http://localhost/sigp/partenaire/get/all?user=hibaigle&mdp=mdp";
+          "https://hibaigle.000webhostapp.com/sigp/partenaire/get/all?user=hibaigle&mdp=mdp";
         const headers = {
           "Content-Type": "application/json",
         };
@@ -329,7 +329,7 @@ export const useStore = defineStore("store", {
         datas.append("email", email);
         datas.append("mdp", mdp);
         const url =
-          "http://localhost/sigp/utilisateur_personne/save/?user=hibaigle&mdp=mdp";
+          "https://hibaigle.000webhostapp.com/sigp/utilisateur_personne/save/?user=hibaigle&mdp=mdp";
         const headers = {
           "Content-Type": "multipart/form-data",
         };
@@ -378,7 +378,7 @@ export const useStore = defineStore("store", {
         datas.append("id_avenue", id_avenue);
         datas.append("num_maison", num_maison);
         const url =
-          "http://localhost/sigp/personne/save/?user=hibaigle&mdp=mdp";
+          "https://hibaigle.000webhostapp.com/sigp/personne/save/?user=hibaigle&mdp=mdp";
         const headers = {
           "Content-Type": "multipart/form-data",
         };
@@ -485,7 +485,7 @@ export const useStore = defineStore("store", {
         datas.append("couleur_oeil", couleur_oeil);
         datas.append("id_partenaire", id_partenaire);
         const url =
-          "http://localhost/sigp/personne/save/?user=hibaigle&mdp=mdp";
+          "https://hibaigle.000webhostapp.com/sigp/personne/save/?user=hibaigle&mdp=mdp";
         const headers = {
           "Content-Type": "multipart/form-data",
         };
@@ -517,7 +517,7 @@ export const useStore = defineStore("store", {
       datas.append("couleur_oeil", couleur);
       try {
         const url =
-          "http://localhost/sigp/naissance/save/?user=hibaigle&mdp=mdp";
+          "https://hibaigle.000webhostapp.com/sigp/naissance/save/?user=hibaigle&mdp=mdp";
         // const headers={
         //   "Content-Type":"multipart/form-data"
         // };
@@ -546,7 +546,7 @@ export const useStore = defineStore("store", {
         datas.append("nom_groupement", nomGroupement);
         datas.append("id_province", province);
         const url =
-          "http://localhost/sigp/groupement/save/?user=hibaigle&mdp=mdp";
+          "https://hibaigle.000webhostapp.com/sigp/groupement/save/?user=hibaigle&mdp=mdp";
         const rest = await axios({
           method: "post",
           url: url,
@@ -572,7 +572,7 @@ export const useStore = defineStore("store", {
         const datas = new FormData();
         datas.append("nom_avenue", nomAvenue);
         datas.append("id_quartier", quartier);
-        const url = "http://localhost/sigp/avenue/save/?user=hibaigle&mdp=mdp";
+        const url = "https://hibaigle.000webhostapp.com/sigp/avenue/save/?user=hibaigle&mdp=mdp";
         const rest = await axios({
           method: "post",
           url: url,
@@ -601,7 +601,7 @@ export const useStore = defineStore("store", {
       datas.append("id_categorie_partenaire", xid);
       try {
         const url =
-          "http://localhost/sigp/partenaire/save/?user=hibaigle&mdp=mdp";
+          "https://hibaigle.000webhostapp.com/sigp/partenaire/save/?user=hibaigle&mdp=mdp";
         const rest = await axios({
           method: "post",
           url: url,

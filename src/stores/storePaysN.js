@@ -8,7 +8,7 @@ export const usePaysN = defineStore("uPaysN", {
   actions: {
     async getpays() {
       let data = await axios.get(
-        "http://localhost/sigp/pays/get/all?user=hibaigle&mdp=mdp"
+        "https://hibaigle.000webhostapp.com/sigp/pays/get/all?user=hibaigle&mdp=mdp"
       );
       return data;
     },
@@ -17,7 +17,7 @@ export const usePaysN = defineStore("uPaysN", {
     let d = new FormData();
     d.append("nom_pays", p.nom_pays);
     let data = await axios.post(
-      "http://localhost/sigp/pays/save?user=hibaigle&mdp=mdp",
+      "https://hibaigle.000webhostapp.com/sigp/pays/save?user=hibaigle&mdp=mdp",
       d
     );
     return data;

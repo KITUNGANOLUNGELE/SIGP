@@ -8,14 +8,14 @@ export const useColleN = defineStore("uColleN", {
   actions: {
     async getcollectivite() {
       let data = await axios.get(
-        "http://localhost/sigp/collectivite/get/all?user=hibaigle&mdp=mdp"
+        "https://hibaigle.000webhostapp.com/sigp/collectivite/get/all?user=hibaigle&mdp=mdp"
       );
       return data;
     },
     async getFromTerr(s){
       let f = new FormData();
       f.append("id_territoire", s.id_territoire);
-      let data = await axios.post("http://localhost/sigp/collectivite/get/terr?user=hibaigle&mdp=mdp",f)
+      let data = await axios.post("https://hibaigle.000webhostapp.com/sigp/collectivite/get/terr?user=hibaigle&mdp=mdp",f)
       return data.data
   }
   },
