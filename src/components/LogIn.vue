@@ -5,22 +5,21 @@
         <q-card class="q-pa-md shadow-2 my_card" bordered>
           <q-card-section class="text-center">
             <div class="text-grey-9 text-h5 text-weight-bold">Se connecter</div>
-            <div class="text-grey-8">
-              Accéder à votre compte
-            </div>
+            <div class="text-grey-8">Accéder à votre compte</div>
           </q-card-section>
           <q-card-section>
             <div class="q-pa-md">
               <q-form @submit="authentification()" ref="form">
-                <div class="q-gutter-md">
-                  <q-select                       
+                <div>
+                  <q-select
+                    dense
+                    outlined
                     v-model="role"
                     input-debounce="0"
                     label="votre structure"
                     :options="options_catego"
                     @filter="filterFn"
                     :rules="[(val) => !!val || 'Champ requis']"
-                    style="width: 100%"
                     behavior="menu"
                   />
                   <q-input
@@ -32,7 +31,7 @@
                     required
                     :rules="[emailRule]"
                     lazy-rules
-                  /> 
+                  />
                   <q-input
                     v-model="psw"
                     label="Mot de passe"
@@ -41,7 +40,7 @@
                     type="password"
                     required
                     lazy-rules
-                  /><br/>
+                  /><br />
                 </div>
                 <q-btn
                   style="border-radius: 8px"
@@ -84,17 +83,17 @@
 </template>
 
 <script>
-import { useQuasar } from 'quasar'
-import { ref, onMounted, onBeforeUnmount} from "vue";
-import { useRouter } from 'vue-router'
+import { useQuasar } from "quasar";
+import { ref, onMounted, onBeforeUnmount } from "vue";
+import { useRouter } from "vue-router";
 import { useStore } from "src/stores/store";
 
 export default {
   setup() {
     const router = useRouter();
-    const role = ref('');
-    const login = ref('');
-    const psw = ref('');
+    const role = ref("");
+    const login = ref("");
+    const psw = ref("");
     // Database import's initialisation PINIA
     const store = useStore();
     // console.log(user_auth.name)
@@ -103,10 +102,10 @@ export default {
     let timer;
     onBeforeUnmount(() => {
       if (timer !== void 0) {
-        clearTimeout(timer)
-        $q.loading.hide()
+        clearTimeout(timer);
+        $q.loading.hide();
       }
-    })
+    });
     let categorie_partn = ref([]);
     let data_catego = [];
     onMounted(() => {
@@ -123,29 +122,26 @@ export default {
     });
     const options_catego = ref([data_catego]);
     // holding method
-    const authentification = () =>{
-        // circular progress
-        $q.loading.show({
-          message: 'Authentification en cours.<br/><span class="text-amber text-italic">Veuillez patienter...</span>',
-          html: true
-        })
-        // hiding in 3s
-        timer = setTimeout(() => {
-          // Calling the authentification method from pinia
-          const xlogins = {
-              role:role.value.label,
-              login:login.value,
-              psw:psw.value,
-            };
-          store.authen(
-              xlogins.role,
-              xlogins.login,
-              xlogins.psw,
-            )
-          $q.loading.hide()
-            timer = void 0
-        }, 2000)
-    }
+    const authentification = () => {
+      // circular progress
+      $q.loading.show({
+        message:
+          'Authentification en cours.<br/><span class="text-amber text-italic">Veuillez patienter...</span>',
+        html: true,
+      });
+      // hiding in 3s
+      timer = setTimeout(() => {
+        // Calling the authentification method from pinia
+        const xlogins = {
+          role: role.value.label,
+          login: login.value,
+          psw: psw.value,
+        };
+        store.authen(xlogins.role, xlogins.login, xlogins.psw);
+        $q.loading.hide();
+        timer = void 0;
+      }, 2000);
+    };
 
     return {
       categorie_partn,
@@ -181,7 +177,7 @@ export default {
       },
     };
   },
-}
+};
 </script>
 
 <style lang="sass">
