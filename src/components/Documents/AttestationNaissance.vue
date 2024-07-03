@@ -7,24 +7,20 @@
     </div>
 
     <br />
-    <p>PROVINCE DU NORD-KIVU</p>
-    <p>VILLE DE GOMA</p>
-    <p>COMMUNE DE GOMA</p>
-    <p>BUREAU DE L'ETAT CIVIL</p>
-    <p>E-mail: communedegomank@gmail.com</p>
     <h1 class="text-center text-uppercase underline">
-      Attestation de Naissance
+      Attestation de naissance
     </h1>
 
     <!-- Ajoutez ici les détails spécifiques de l'attestation -->
     <p class="text-h5 text-center text-bold">
       N°5072/22.9.2./CD/D3/{{ currentYear }}
     </p>
-    <div class="watermark">COMMUNE DE GOMA</div>
+    <div class="watermark">Attestation de naissance</div>
     <p class="text-justify indente q-pa-md" style="line-height: 1.5">
-      Je soussigné <span class="text-bold">MUSOMBA LUBUBU Guy</span> officier de
+      <!-- Je soussigné <span class="text-bold">MUSOMBA LUBUBU Guy</span> officier de
       l'état civil et Bourgmestre de la Commune de Goma, atteste par la présente
-      qu'en date du {{ formatDate(personne.personne.donnee.date_naissance) }} est né à <span class="text-bold">{{ personne.personne.donnee.nom_ville.toUpperCase() }}</span> un
+      qu' -->
+      En date du {{ formatDate(personne.personne.donnee.date_naissance) }} est né à <span class="text-bold">{{ personne.personne.donnee.nom_ville.toUpperCase() }}</span> un
       enfant de sexe <span class="text-bold">{{ personne.personne.donnee.sexe == "F" || personne.personne.donnee.sexe =="f" || personne.personne.donnee.sexe =="Féminin" ? "FEMININ" : "MASCULIN" }}</span> auquel a été donné
       le nom de <span class="text-bold">{{ personne.personne.donnee.nom.toUpperCase() }} {{ personne.personne.donnee.postnom.toUpperCase() }} {{ personne.personne.donnee.prenom.toUpperCase() }}</span> enfant
       issu d'un mariage monogamique, coutumier, civil, religieux conclu entre
@@ -44,10 +40,10 @@
     </p>
     <p>N.B: Durée pour Six (6) mois</p>
     <p class="text-right">
-      Fait à Goma le {{ currentDay }} {{ currentMonth }} {{ currentYear }}
+      Fait à Goma le {{ currentDay }} {{ currentMonth }} {{ currentYear }}, chez {{ structure.toUpperCase() }}
     </p>
     <div class="text-right text-weight-bold">
-      <p>OFFICIER DE L'ETAT CIVIL COMMUNE DE GOMA</p>
+      <p>MEDECIN DIRECTEUR</p>
       <span class="text-center">Ou son délégué</span>
     </div>
   </div>
@@ -62,6 +58,7 @@ export default {
     const currentDay = ref(currentDate.getDate());
     const currentMonth = ref(getMonthName(currentDate.getMonth() + 1));
     const currentHour = ref(currentDate.getHours());
+    const structure = localStorage.structure;
     //get names of personne
     const personne = usePersonneN()
     console.log(personne.personne)
@@ -98,6 +95,7 @@ export default {
     }
 
     return {
+      structure,
       currentYear,
       currentDay,
       currentMonth,

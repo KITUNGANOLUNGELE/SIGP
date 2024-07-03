@@ -15,66 +15,9 @@
           <q-icon name="dashboard" />
         </q-item-section>
       </q-item>
-
-      <q-item
-        clickable
-        :active="link === 'search'"
-        @click="open('right')"
-        active-class="border"
-      >
-        <q-item-section avatar class="flex flex-center column">
-          <q-icon name="fas fa-search" />
-        </q-item-section>
-        <!-- Search bouton -->
-        <q-dialog v-model="dialog" :position="position">
-          <q-card style="width: 350px">
-            <q-linear-progress :value="0.6" color="black" />
-
-            <q-card-section class="row items-center no-wrap">
-              <q-input
-                flat
-                dense
-                v-model="searchQuery"
-                @input="handleSearchInput"
-                placeholder="Rechercher..."
-              >
-                <template v-slot:append>
-                  <q-icon name="search" />
-                </template>
-              </q-input>
-
-              <q-space />
-              <q-list>
-                <q-item v-for="(item, index) in filteredItems" :key="index">
-                  <q-item-section>{{ item }}</q-item-section>
-                </q-item>
-              </q-list>
-            </q-card-section>
-          </q-card>
-        </q-dialog>
-        <!-- Fin search bouton -->
-      </q-item>
-
-      <router-link to="/">
-        <q-item
-          clickable
-          :active="link === 'logout'"
-          @click="link = 'logout'"
-          active-class="border"
-        >
-          <q-item-section avatar class="flex flex-center column">
-            <q-icon name="logout" />
-          </q-item-section>
-        </q-item>
-      </router-link>
-      <q-item
-        clickable
-        :active="link === 'setting'"
-        @click="link = 'setting'"
-        active-class="border"
-      >
-        <q-item-section avatar class="flex flex-center column">
-          <q-icon name="settings" />
+      <q-item>
+        <q-item-section>
+          <q-btn icon="logout" flat dense @click="deconnecter" />
         </q-item-section>
       </q-item>
     </q-list>
@@ -100,6 +43,7 @@
 <script>
 import { ref } from "vue";
 import { defineComponent } from "vue";
+import { useRouter } from "vue-router";
 
 export default defineComponent({
   name: "IndexPage",
@@ -107,7 +51,14 @@ export default defineComponent({
     const dialog = ref(false);
     const position = ref("top");
     const leftDrawerOpen = ref(false);
+    const router = useRouter();
+
+    let deconnecter = ()=>{
+      localStorage.clear();
+      router.push("/");
+    }
     return {
+      deconnecter,
       link: ref("user"),
       leftDrawerOpen,
       dialog,

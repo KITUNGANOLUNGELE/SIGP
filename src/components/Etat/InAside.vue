@@ -39,7 +39,7 @@ export default defineComponent({
           id: 2,
           label: "Document",
           icon: "fa-solid fa-file",
-          to: "/RapEta",
+          to: "/RapPart",
         },
       ],
       link: ref("DashbBoard"),

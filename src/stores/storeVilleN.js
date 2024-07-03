@@ -8,7 +8,7 @@ export const useVilleN = defineStore("uVilleN", {
   actions: {
     async getville() {
       let data = await axios.get(
-        "https://hibaigle.000webhostapp.com/sigp/ville/get/all?user=hibaigle&mdp=mdp"
+        "http://localhost:8080/sigp/ville/get/all?user=hibaigle&mdp=mdp"
       );
       return data;
     },
@@ -17,7 +17,7 @@ export const useVilleN = defineStore("uVilleN", {
       d.append("nom_ville", v.nom_ville);
       d.append("id_province", v.id_province);
       let data = await axios.post(
-        "https://hibaigle.000webhostapp.com/sigp/ville/save?user=hibaigle&mdp=mdp",
+        "http://localhost:8080/sigp/ville/save?user=hibaigle&mdp=mdp",
         d
       );
       return data;
@@ -26,7 +26,7 @@ export const useVilleN = defineStore("uVilleN", {
       let f = new FormData();
       f.append("id_province", v.id_province);
       let data = await axios.post(
-        "https://hibaigle.000webhostapp.com/sigp/ville/get/prov?user=hibaigle&mdp=mdp",
+        "http://localhost:8080/sigp/ville/get/prov?user=hibaigle&mdp=mdp",
         f
       );
       return data.data;

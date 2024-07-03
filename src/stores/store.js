@@ -89,6 +89,7 @@ export const useStore = defineStore("store", {
           localStorage.setItem("id_partenaire", res.data.id_partenaire);
           localStorage.setItem("role", res.data.u_role);
           localStorage.setItem("structure", res.data.role)
+          localStorage.setItem("nom", res.data.nom);
           // sessionStorage.setItem("n_user", user);
           // sessionStorage.setItem("role", role);
           // sessionStorage.setItem("u_role", u_role);

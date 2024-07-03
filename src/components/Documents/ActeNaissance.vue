@@ -6,19 +6,32 @@
           <div class="q-gutter-md">
             <h1 class="text-h5 text-bold">REPUBLIQUE DEMOCRATIQUE DU CONGO</h1>
             <!-- ces informations proviendront de l'affectation de l'officier de l'état civile -->
-            <p class="text-h5">Province du : ...........</p>
-            <p class="text-h5">Ville de : ...........</p>
-            <p class="text-h5">District de : ...........</p>
-            <p class="text-h5">Territoire / Commune de: ...........</p>
-            <p class="text-h5">Chefferie / Secteur ou cité de : ...........</p>
+            <p class="text-h5">Province du : Nord-Kivu</p>
+            <p class="text-h5">Ville de : Goma</p>
+            <!-- <p class="text-h5">District de : ...........</p> -->
+            <p class="text-h5">Territoire / Commune de: {{ structure }}</p>
+            <!-- <p class="text-h5">Chefferie / Secteur ou cité de : ...........</p>
             <p class="text-h5">
               Bureau principal de l'Etat Civil de : ...........
             </p>
             <p class="text-h5">
               Bureau Secondaire de l'Etat Civil de : ...........
-            </p>
-            <p class="text-h5">
-              Acte N° : ........... Volume ........... Folio N° ...........
+            </p> -->
+            <p class="text-h5 ">
+              Acte N° :
+              {{ info.donnee.nom_ville.substring(0, 3) + "/" + info.donnee[0]
+              }} </p>
+              <p class="text-h5">Volume : {{ info.donnee.volume }}
+              <span class="text-h5" style="margin-left: 10%"
+                >Folio n° : {{ info.donnee.folio }}</span
+              >
+              <span
+                class="text-h5"
+                style="margin-left: 10%"
+                v-if="info.donnee.diplicata == true"
+              >
+                Duplicata</span
+              ><!--........ Folio N° ........... -->
             </p>
           </div>
         </div>
@@ -53,10 +66,14 @@
             <span class="text-h5 text-bold">{{ currentDay }}</span>
             <sup>ème</sup> Jour du mois de
             <span class="text-h5 text-bold">{{ currentMonth }}</span> à
-            <span class="text-h5 text-bold">{{ currentHour }}</span> heures par devant nous
-            <!--Infomations about officier-->......................... officier
-            de l'Etat civil de
-            <!--Infomations about officier, affectation-->.........................................
+            <span class="text-h5 text-bold">{{ currentHour }}</span> heures par
+            devant nous
+            <!--Infomations about officier-->
+            officier de l'Etat civil de
+            <!--Infomations about officier, affectation--><span
+              class="text-h5 text-bold"
+              >{{ nom }}</span
+            >
             a comparu
             <span class="text-h5 text-bold"
               >{{ info.pere.nom }} {{ info.pere.postnom }}
@@ -68,8 +85,8 @@
             }}</span>
             le<span class="text-h5 text-bold">{{
               Fdate(info.pere.date_naissance.toString())
-            }}</span
-            > profession
+            }}</span>
+            profession
             <span class="text-h5 text-bold">{{ info.pere.profession }}</span>
             résident à
             <span class="text-h5 text-bold">{{
@@ -90,9 +107,9 @@
               >{{ FdateT(info.donnee.date_naissance)[1] }}<sup>er</sup></span
             ><span class="text-h5 text-bold" v-else
               >{{ FdateT(info.donnee.date_naissance)[1] }}<sup>ième</sup></span
-            > jour du mois de {{
-              FdateT(info.donnee.date_naissance)[2]
-            }} de l'année
+            >
+            jour du mois de {{ FdateT(info.donnee.date_naissance)[2] }} de
+            l'année
             <span class="text-h5 text-bold">{{
               FdateT(info.donnee.date_naissance)[3]
             }}</span>
@@ -103,22 +120,23 @@
             un enfant du sexe
             <span class="text-h5 text-bold"> {{ info.donnee.sexe }} </span>
             nommé
-            <span class="text-h5 text-bold"
-              >.{{ info.donnee.nom }} {{ info.donnee.postnom }}
-              {{ info.donnee.prenom }}....</span
-            > fils (fille) de
-            <span class="text-h5 text-bold"
-              >{{ info.mere.nom }} {{ info.mere.postnom }}
-              {{ info.mere.prenom }}</span
-            >.................................... né à
+            <span class="text-h5 text-bold">
+              {{ info.donnee.nom }} {{ info.donnee.postnom }}
+              {{ info.donnee.prenom }}
+            </span>
+            fils (fille) de
+            <span class="text-h5 text-bold">
+              {{ info.mere.nom }} {{ info.mere.postnom }} {{ info.mere.prenom }}
+            </span>
+            née à
             <span class="text-h5 text-bold">{{
               info.mere.lieu_naissance
             }}</span>
             le
             <span class="text-h5 text-bold">{{
               Fdate(info.mere.date_naissance.toString())
-            }}</span> de nationalité Congolaise (a revoir selon le pays)
-            profession
+            }}</span>
+            de nationalité Congolaise (a revoir selon le pays) profession
             <span class="text-h5 text-bold">{{ info.mere.profession }}</span>
             <span class="text-h5 text-bold">{{
               info.mere.nom_ville +
@@ -197,33 +215,37 @@ export default {
     const currentHour = ref(currentDate.getHours());
     const Personne = usePersonneN();
     const info = ref({});
+    const structure = localStorage.structure;
+    const nom = localStorage.nom;
     info.value = Object(Personne.personne);
     console.log(info.value);
     function Fdate(date = "") {
       let d = new Date();
       let thed = date.split("-");
       d.setDate(thed[2]);
-      d.setMonth(thed[1]-1);
+      d.setMonth(thed[1] - 1);
       d.setFullYear(thed[0]);
-      return d.toLocaleString('fr-FR',{
-        weekday : 'long',
-        year : 'numeric',
-        month: 'long',
-        day : 'numeric',
+      return d.toLocaleString("fr-FR", {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
       });
     }
     function FdateT(date = "") {
       let d = new Date();
       let thed = date.split("-");
       d.setDate(thed[2]);
-      d.setMonth(thed[1]-1);
+      d.setMonth(thed[1] - 1);
       d.setFullYear(thed[0]);
-      return d.toLocaleString('fr-FR', {
-        weekday : 'long',
-        day : 'numeric',
-        month : 'long',
-        year : 'numeric',
-      }).split(" ");
+      return d
+        .toLocaleString("fr-FR", {
+          weekday: "long",
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        })
+        .split(" ");
     }
     function getMonthName(monthNumber) {
       const months = [
@@ -244,6 +266,8 @@ export default {
     }
 
     return {
+      nom,
+      structure,
       currentYear,
       currentDay,
       currentMonth,

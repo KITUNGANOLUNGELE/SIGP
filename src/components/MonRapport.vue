@@ -94,13 +94,19 @@
                   @change="searchP"
                   :rules="[(val) => !!val || 'Champ date requis']"
                 />
-                <q-input
+                <!-- <q-input
                   dense
                   v-model="groupement"
                   label="Groupement"
                   type="text"
                   :rules="[(val) => !!val || 'Champ groupement requis']"
-                />
+                /> -->
+                <q-space />
+                <q-input dense v-model="folio" label="Folio" type="text" />
+                <q-input dense v-model="volume" label="Volume" type="text" />
+                <div class="text-center q-mt-sm q-mb-sm" @click="savePers">
+                  <q-btn color="blue" icon="save"></q-btn>
+                </div>
                 <!-- <q-btn
                   square
                   color="dark"
@@ -158,7 +164,12 @@
     <ul v-if="showResults" class="q-pa-md" data-aos="zoom-in">
       <li>
         <div ref="printableContent">
-          <AttestationNaissance />
+          <div v-if="role == 'hopital'">
+            <AttestationNaissance />
+          </div>
+          <div v-if="role == 'etat-civil'">
+            <ActeNaissance />
+          </div>
         </div>
 
         <div class="bg-grey-4 q-mt-md q-flex flex-center q-justify-end">
@@ -198,14 +209,20 @@ import ActeNaissance from "./Documents/ActeNaissance.vue";
 import { usePersonneN } from "src/stores/storePersonneN";
 
 export default {
-  components: { AttestationNaissance },
+  components: { AttestationNaissance, ActeNaissance },
   data() {
+    const role = localStorage.role;
+    console.log(role);
     const list = ["blur(4px)"];
     const dialog = ref(false);
     const backdropFilter = ref(null);
     return {
+      role,
       searchQuery: "",
+      folio: ref(""),
+      volume: ref(""),
       nom: ref(""),
+      id: ref(""),
       postnom: ref(""),
       prenom: ref(""),
       lieu_naissance: ref(""),
@@ -259,6 +276,7 @@ export default {
         });
     },
     recupPers(s) {
+      this.id = s.id;
       this.nom = s.nom;
       this.postnom = s.postnom;
       this.prenom = s.prenom;
@@ -266,11 +284,26 @@ export default {
       this.num_maison = s.num_maison;
       this.date_naissance = s.date_naissance;
       this.show_list = false;
-      this.personne.buldActeNaiss(s.id).then((res) => {
-        this.showResults = true;
-        this.dialog = false;
-        this.personne.personne = res;
-      });
+      // this.personne.buldActeNaiss(s.id).then((res) => {
+      //   this.showResults = true;
+      //   this.dialog = false;
+      //   this.personne.personne = res;
+      // });
+    },
+    savePers() {
+      this.personne
+        .addActe({
+          folio: this.folio,
+          volume: this.volume,
+          id_personne: this.id,
+        })
+        .then((res) => {
+          console.log(res);
+          let data = res;
+          this.showResults = true;
+          this.dialog = false;
+          this.personne.personne = data;
+        });
     },
     search() {
       this.personne.buldActeNaiss(this.searchQuery).then((res) => {

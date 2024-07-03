@@ -8,6 +8,7 @@ export const usePersonneN = defineStore("uPersN", {
     mere: null,
     pere_tmp: null,
     mere_tmp: null,
+    acte : null
   }),
   getters: {},
   actions: {
@@ -60,6 +61,16 @@ export const usePersonneN = defineStore("uPersN", {
       let res = await axios.post("https://hibaigle.000webhostapp.com//sigp/personne/acte_naissance?user=hibaigle&mdp=mdp", form);
       console.log(res.data);
       return res.data
+  },
+  async addActe(f){
+    console.log(f.folio);
+    let form = new FormData();
+    form.append("folio", f.folio);
+    form.append("volume", f.volume);
+    form.append("id_personne", f.id_personne);
+    let res = await axios.post("https://hibaigle.000webhostapp.com/sigp/personne/acte?user=hibaigle&mdp=mdp", form);
+    console.log(res.data);
+    return res.data;
   }
   },
 });
